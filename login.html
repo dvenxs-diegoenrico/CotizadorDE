@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Acceso · D.E. Soluciones</title>
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Instrument+Sans:wght@400..700&display=swap">
+<style>
+:root {
+  --bg: #ECEBE7; --panel: #F8F7F4; --ink: #141416; --muted: #615E58; --line: #D6D3CB; --field: #FFFFFF;
+  --accent: #8E6424; --focus: #1F62C9; --warn: #9A3B12;
+  --display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #111113; --panel: #1A1A1D; --ink: #EEECE7; --muted: #A9A59C; --line: #303035; --field: #232327;
+  --accent: #D5A55A; --focus: #7DB2FF; --warn: #F08A5D; color-scheme: dark } }
+* { box-sizing: border-box }
+html, body { height: 100% }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.45;
+  display: grid; place-items: center; padding: 24px 16px }
+.card { width: 100%; max-width: 380px; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 36px 28px 28px;
+  display: flex; flex-direction: column; align-items: center; gap: 22px; box-shadow: 0 10px 40px rgba(0,0,0,.08) }
+.logo { width: 88px; height: 88px; border-radius: 18px; background: #101012; display: grid; place-items: center }
+.logo img { width: 50px; height: 54px; display: block }
+.brand { text-align: center }
+.brand h1 { margin: 0; font-family: var(--display); font-stretch: 85%; font-size: 28px; font-weight: 800; letter-spacing: -0.3px; line-height: 1.05 }
+.brand p { margin: 6px 0 0; color: var(--muted); font-size: 12px; letter-spacing: 2.4px; text-transform: uppercase }
+form { width: 100%; display: flex; flex-direction: column; gap: 12px }
+label { font-weight: 600; font-size: 13px; color: var(--muted) }
+input { font: 400 16px var(--body); width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--field); color: var(--ink); min-height: 46px }
+input:focus { outline: 2px solid var(--focus); outline-offset: 1px; border-color: transparent }
+button { font: 600 15px var(--body); border-radius: 10px; padding: 12px 16px; cursor: pointer; border: 1px solid var(--ink); background: var(--ink); color: var(--panel); min-height: 46px }
+button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px }
+.err { color: var(--warn); font-size: 14px; font-weight: 600; text-align: center; margin: 0 }
+.foot { color: var(--muted); font-size: 12px; text-align: center }
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="logo"><img src="/logo.svg" alt="Logo D.E. Soluciones"></div>
+  <div class="brand">
+    <h1>DIEGO ENRICO</h1>
+    <p>Soluciones Creativas</p>
+  </div>
+  <form method="post" action="/auth">
+    <label for="password">Contraseña para acceder al cotizador</label>
+    <input id="password" name="password" type="password" autocomplete="current-password" required autofocus>
+    <p class="err" id="err" hidden>Contraseña incorrecta. Intenta de nuevo.</p>
+    <button type="submit">Entrar</button>
+  </form>
+  <div class="foot">Acceso privado · D.E. Soluciones</div>
+</main>
+<script>
+  if (new URLSearchParams(location.search).has('error')) document.getElementById('err').hidden = false;
+</script>
+</body>
+</html>

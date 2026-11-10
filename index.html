@@ -1,0 +1,1325 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>Cotizador Diego Enrico</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Instrument+Sans:wght@400..700&display=swap">
+<style>
+/* Mesa de taller: el formulario a la izquierda, la hoja tal como sale en PDF a la derecha (papel, igual en ambos temas) */
+:root {
+  --bg: #ECEBE7; --panel: #F8F7F4; --ink: #141416; --muted: #615E58; --line: #D6D3CB; --field: #FFFFFF;
+  --accent: #8E6424; --accent-soft: #F1E7D6; --focus: #1F62C9; --warn: #9A3B12;
+  --paper: #FFFFFF; --paper-ink: #18181B; --paper-muted: #71717A; --paper-line: #ECECEF; --paper-band: #101012;
+  --display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sheet: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111113; --panel: #1A1A1D; --ink: #EEECE7; --muted: #A9A59C; --line: #303035; --field: #232327;
+  --accent: #D5A55A; --accent-soft: #2E2618; --focus: #7DB2FF; --warn: #F08A5D; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #111113; --panel: #1A1A1D; --ink: #EEECE7; --muted: #A9A59C; --line: #303035; --field: #232327;
+  --accent: #D5A55A; --accent-soft: #2E2618; --focus: #7DB2FF; --warn: #F08A5D; color-scheme: dark }
+
+* { box-sizing: border-box }
+[hidden] { display: none !important }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.45;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 56px }
+.wrap { max-width: 1360px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px }
+h1, h2, h3 { margin: 0; text-wrap: balance }
+
+.top { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between }
+.brand { display: flex; gap: 14px; align-items: center; min-width: 0 }
+.mono-badge { width: 46px; height: 46px; border-radius: 10px; background: #101012; display: grid; place-items: center; flex: none }
+.brand h1 { font-family: var(--display); font-stretch: 85%; font-size: 26px; font-weight: 800; letter-spacing: -0.3px; line-height: 1.05 }
+.brand p { margin: 2px 0 0; color: var(--muted); font-size: 14px }
+.actions { display: flex; flex-wrap: wrap; gap: 8px }
+button { font: 600 14px var(--body); border-radius: 8px; padding: 9px 16px; cursor: pointer; border: 1px solid var(--line); background: var(--panel); color: var(--ink); min-height: 42px }
+button.primary { background: var(--ink); border-color: var(--ink); color: var(--panel) }
+button:hover { border-color: var(--muted) }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px }
+.status { margin: 0; font-size: 13px; color: var(--muted); min-height: 18px; width: 100%; text-align: right }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: 20px; align-items: start }
+@media (max-width: 1020px) { .grid { grid-template-columns: minmax(0, 1fr) } }
+
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 24px; min-width: 0 }
+.group { display: flex; flex-direction: column; gap: 12px; min-width: 0 }
+.group > h2 { font-family: var(--display); font-stretch: 85%; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--ink); padding-bottom: 6px; border-bottom: 1.5px solid var(--ink) }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px }
+.fields.three { grid-template-columns: repeat(3, minmax(0, 1fr)) }
+@media (max-width: 560px) { .fields, .fields.three { grid-template-columns: minmax(0, 1fr) } }
+label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); min-width: 0 }
+label.wide { grid-column: 1 / -1 }
+input, select, textarea { font: 15px var(--body); color: var(--ink); background: var(--field); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; width: 100%; min-width: 0; min-height: 40px }
+textarea { min-height: 64px; resize: vertical }
+.num { font-variant-numeric: tabular-nums; text-align: right }
+.hint { font-size: 13px; color: var(--muted); margin: 0 }
+
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 9px; padding: 3px; gap: 3px; background: var(--field) }
+.seg button { border: 0; min-height: 34px; padding: 5px 12px; background: transparent; font-size: 13.5px; border-radius: 6px }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--panel) }
+.segrow { display: flex; flex-direction: column; gap: 6px }
+.segrow > span { font-size: 13px; color: var(--muted) }
+
+.check { flex-direction: row; align-items: center; gap: 10px; color: var(--ink); font-size: 14px }
+.check input { width: 18px; min-height: 18px; height: 18px; accent-color: var(--ink); flex: none }
+.checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px }
+@media (max-width: 560px) { .checks { grid-template-columns: minmax(0, 1fr) } }
+
+/* catálogo */
+.add { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px }
+.add input { grid-column: 1 / -1 }
+.lines { display: flex; flex-direction: column; gap: 10px }
+.line { border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: grid; grid-template-columns: minmax(0, 1fr) 92px 118px 40px; gap: 8px 10px; align-items: end; background: var(--field) }
+.line .full { grid-column: 1 / -1 }
+.line .tag { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted) }
+.line button.del { padding: 0; width: 40px; min-height: 40px; font-size: 18px; line-height: 1 }
+@media (max-width: 560px) { .line { grid-template-columns: minmax(0, 1fr) 84px 40px } .line .price { grid-column: 1 / 3 } }
+.refs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12.5px; color: var(--muted) }
+.refs button { min-height: 30px; padding: 3px 10px; font-size: 12.5px; font-weight: 500; border-radius: 999px; background: var(--panel); font-variant-numeric: tabular-nums }
+.refs button.on { border-color: var(--accent); background: var(--accent-soft); color: var(--ink) }
+.flag { display: inline-block; font-size: 12px; font-weight: 600; color: var(--accent); }
+details.cost { font-size: 13px; color: var(--muted) }
+details.cost summary { cursor: pointer; padding: 2px 0 }
+details.cost .crow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: 8px; align-items: end; margin-top: 8px }
+@media (max-width: 560px) { details.cost .crow { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) } }
+.internal { font-size: 12.5px; color: var(--muted) }
+
+details.box { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--field) }
+details.box summary { cursor: pointer; font-weight: 600; font-size: 14px }
+.freqbox { display: flex; flex-direction: column; gap: 8px }
+.freqhead { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 13px; font-weight: 600 }
+.freq { display: flex; flex-wrap: wrap; gap: 6px }
+.freq button { min-height: 36px; padding: 6px 12px; font-size: 13px; font-weight: 500; border-radius: 999px; background: var(--field); text-align: left }
+.freq button b { font-weight: 600; color: var(--accent); margin-left: 4px; font-variant-numeric: tabular-nums }
+.clienthint { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); background: var(--accent-soft); border-radius: 8px; padding: 8px 10px }
+.clienthint button { min-height: 34px; padding: 4px 12px; font-size: 13px }
+.filebtn { position: relative; display: inline-flex; align-items: center; justify-content: center; font: 600 14px var(--body); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; background: var(--panel); min-height: 42px; padding: 9px 16px; cursor: pointer }
+.filebtn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; min-height: 0 }
+.filebtn:focus-within { outline: 2px solid var(--focus); outline-offset: 2px }
+.tiers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; margin-top: 10px }
+.saved { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; margin-top: 10px }
+
+/* cotizador por tintas */
+.tq { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px; min-width: 0 }
+.tq-head { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; align-items: end; border-bottom: 1.5px solid var(--ink); padding-bottom: 12px }
+.tq-head h2 { font-family: var(--display); font-stretch: 85%; font-size: 22px; font-weight: 800; letter-spacing: -0.2px }
+.tq-head .hint { margin-top: 4px; max-width: 62ch }
+.tq-markup { width: 190px; max-width: 100% }
+.tq-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px; align-items: start }
+@media (max-width: 900px) { .tq-grid { grid-template-columns: minmax(0, 1fr) } }
+.tq-form { display: flex; flex-direction: column; gap: 12px; min-width: 0 }
+.tq-pos { display: flex; flex-direction: column; gap: 10px }
+.pos { border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: var(--field); display: flex; flex-direction: column; gap: 10px }
+.pos-top { display: grid; grid-template-columns: minmax(0, 1fr) 40px; gap: 8px; align-items: end }
+.pos-top button { padding: 0; width: 40px; min-height: 40px; font-size: 18px }
+.pos .sizes, .pos .inks { display: flex; flex-wrap: wrap; gap: 4px }
+.pos .sizes button, .pos .inks button { min-height: 38px; padding: 5px 10px; font-size: 13px; border-radius: 7px; background: var(--panel); line-height: 1.2; text-align: left }
+.pos .sizes button small { display: block; font-size: 11px; color: var(--muted); font-weight: 500 }
+.pos button[aria-pressed="true"] { background: var(--ink); color: var(--panel); border-color: var(--ink) }
+.pos button[aria-pressed="true"] small { color: var(--panel); opacity: .75 }
+.pos .dims { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) minmax(0, 1.4fr); gap: 8px; align-items: end }
+@media (max-width: 560px) { .pos .dims { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) } .pos .dims .note { grid-column: 1 / -1 } }
+.pos .note { font-size: 12.5px; color: var(--muted) }
+.pos .note.warn { color: var(--warn) }
+.pos .fx { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 12px }
+@media (max-width: 560px) { .pos .fx { grid-template-columns: minmax(0, 1fr) } }
+.sub-k { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted) }
+.tq-res { border: 1px solid var(--line); border-radius: 12px; background: var(--field); padding: 16px; display: flex; flex-direction: column; gap: 12px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); min-width: 0 }
+@media (max-width: 900px) { .tq-res { position: static } }
+.tq-res table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 13.5px }
+.tq-res th { text-align: left; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 6px 4px; border-bottom: 1.5px solid var(--ink) }
+.tq-res td { padding: 7px 4px; border-bottom: 1px solid var(--line); vertical-align: top }
+.tq-res td.r, .tq-res th.r { text-align: right; white-space: nowrap }
+.tq-res .muted { color: var(--muted); font-size: 12px }
+.tq-big { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px }
+.tq-big > div { border-radius: 10px; padding: 12px; background: var(--panel); border: 1px solid var(--line); min-width: 0 }
+.tq-big .k { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); font-weight: 700 }
+.tq-big .v { font-family: var(--display); font-size: 24px; font-weight: 800; font-variant-numeric: tabular-nums; margin-top: 2px; overflow-wrap: anywhere }
+.tq-res .primary { width: 100% }
+
+/* ---------- Hoja (papel) ---------- */
+.sheet-wrap { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); min-width: 0 }
+@media (max-width: 1020px) { .sheet-wrap { position: static } }
+.sheet-label { font-size: 13px; color: var(--muted); margin: 0 0 8px }
+.sheet { background: var(--paper); color: var(--paper-ink); font-family: var(--sheet); font-size: 11.5px; line-height: 1.5; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,.14), 0 14px 40px rgba(0,0,0,.10); overflow: hidden; min-width: 0 }
+.mh { background: var(--paper-band); color: #fff; padding: 26px 30px 22px }
+.mh-row { display: flex; justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap }
+.mh-brand { display: flex; align-items: center; gap: 13px }
+.mh-name { font-size: 17px; font-weight: 700; letter-spacing: 5px }
+.mh-sub { font-size: 7px; letter-spacing: 4px; color: #B9B9BD; margin-top: 3px }
+.mh-doc { text-align: right; font-size: 8px; letter-spacing: 2.5px; color: #B9B9BD; line-height: 2; font-variant-numeric: tabular-nums }
+.mh-doc b { color: #fff; font-weight: 600 }
+.mh-title { font-size: 21px; font-weight: 700; letter-spacing: -0.4px; margin-top: 16px; line-height: 1.15; overflow-wrap: anywhere }
+.mh-title span { font-weight: 300; color: #9A9AA0 }
+.mh-meta { margin-top: 12px; border-top: 1px solid #2A2A2E; padding-top: 10px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px }
+@media (max-width: 560px) { .mh-meta { grid-template-columns: repeat(2, minmax(0, 1fr)) } .mh, .sb { padding-left: 18px !important; padding-right: 18px !important } }
+.mk { font-size: 7px; letter-spacing: 2.4px; color: #86868C; text-transform: uppercase; display: block; margin-bottom: 3px }
+.mv { font-size: 11.5px; color: #fff; font-weight: 600; overflow-wrap: anywhere }
+.ex { display: inline-block; font-size: 9px; font-weight: 700; color: #101012; background: #E8C98F; border-radius: 3px; padding: 1px 6px; margin-left: 6px; letter-spacing: 1px; vertical-align: middle }
+.sb { padding: 22px 30px 20px; display: flex; flex-direction: column; gap: 18px }
+.intro { color: #3F3F46; font-size: 11.5px; line-height: 1.65; margin: 0 }
+.sl { font-size: 8px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; border-bottom: 1.5px solid #101012; padding-bottom: 5px; margin-bottom: 8px }
+.sl span { color: #A1A1AA; font-weight: 500 }
+.tbox { overflow-x: auto }
+table.data { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums }
+table.data th { background: #101012; color: #fff; font-size: 7.5px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 8px 9px; text-align: right; white-space: nowrap }
+table.data th.l, table.data td.l { text-align: left }
+table.data td { padding: 8px 9px; border-bottom: 1px solid var(--paper-line); text-align: right; vertical-align: top; white-space: nowrap }
+table.data td.l { white-space: normal; min-width: 150px }
+table.data td .c { font-weight: 600 }
+table.data td .d { color: #71717A; font-size: 10px; margin-top: 2px }
+table.data tr.sub td { color: #52525B }
+table.data tr.total td { background: #101012; color: #fff; font-weight: 700; font-size: 12.5px; border-bottom: 0 }
+.pay { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px }
+.pay > div { border: 1px solid #E4E4E7; border-radius: 8px; padding: 11px 13px }
+.pay .pk { font-size: 7px; letter-spacing: 2.4px; text-transform: uppercase; color: #A1A1AA; font-weight: 700 }
+.pay .pv { font-size: 17px; font-weight: 700; margin-top: 4px; font-variant-numeric: tabular-nums }
+.pay .pn { font-size: 9.5px; color: #71717A }
+.cond { width: 100%; border-collapse: collapse }
+.cond td { padding: 6px 7px; border-bottom: 1px solid #F0F0F1; vertical-align: top; font-size: 10.5px }
+.cond td.k { width: 32%; color: #71717A }
+.cond td.v { font-weight: 600 }
+.closing { background: #101012; color: #fff; border-radius: 10px; padding: 14px 16px }
+.closing .ct { font-size: 11.5px; font-weight: 700 }
+.closing .cc { font-size: 10px; color: #CFCFD4; margin-top: 4px; line-height: 1.6 }
+.closing .co { margin-top: 9px; padding-top: 9px; border-top: 1px solid #2A2A2E; font-size: 8.5px; color: #9A9AA0; letter-spacing: 1px }
+.foot { border-top: 1px solid #E4E4E7; padding-top: 6px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; font-size: 8px; color: #A1A1AA; letter-spacing: 1px }
+.empty { color: #71717A; text-align: center !important; padding: 16px !important; white-space: normal !important }
+@media (prefers-reduced-motion: no-preference) { button { transition: border-color .15s, background-color .15s } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="mono-badge" aria-hidden="true"><svg viewBox="0 0 240 260" width="26" height="28"><g fill="#fff"><rect x="24" y="20" width="46" height="220" rx="4"/><rect x="24" y="20" width="124" height="46" rx="4"/><rect x="24" y="194" width="124" height="46" rx="4"/><rect x="24" y="107" width="94" height="46" rx="4"/><path d="M 144 20 A 110 110 0 0 1 144 240 L 144 194 A 64 64 0 0 0 144 66 Z"/></g></svg></div>
+      <div><h1>Cotizador Diego Enrico</h1><p>Precios de tus cotizaciones anteriores, reglas de volumen y la hoja lista en tu formato.</p></div>
+    </div>
+    <div class="actions">
+      <button type="button" id="btnNew">Nueva</button>
+      <button type="button" id="btnSave">Guardar</button>
+      <button type="button" id="btnCopy">Copiar texto</button>
+      <button type="button" class="primary" id="btnPdf">Descargar PDF</button>
+    </div>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+  </header>
+
+  <div class="grid">
+    <form class="panel" id="form" autocomplete="off">
+      <section class="group">
+        <h2>Cotización</h2>
+        <div class="fields">
+          <label>Cliente<input id="cliente" list="clientList" placeholder="A quien corresponda"></label><datalist id="clientList"></datalist>
+          <label>Folio<input id="folio"></label>
+          <label>Título (se arma solo; escribe para cambiarlo)<input id="titulo" placeholder="Automático"></label>
+          <label>Subtítulo<input id="subtitulo" placeholder="Ej. sublimación total"></label>
+          <label>Fecha<input id="fecha" type="date"></label>
+          <label>Tallas / distribución<input id="tallas" placeholder="Ej. unitalla · S–XL a confirmar"></label>
+          <div class="wide clienthint" id="clientHint" hidden><span id="clientHintTxt"></span> <button type="button" id="btnClient">Usar sus condiciones</button></div>
+          <label class="wide">Texto de introducción (opcional)<textarea id="intro" placeholder="Si lo dejas vacío se escribe solo a partir de los conceptos."></textarea></label>
+        </div>
+        <details class="box">
+          <summary>Cotizaciones guardadas en este navegador</summary>
+          <div class="saved">
+            <select id="savedSel" aria-label="Cotización guardada"></select>
+            <button type="button" id="btnLoad">Abrir</button>
+            <button type="button" id="btnDel">Borrar</button>
+          </div>
+          <p class="hint" id="delAsk" hidden></p>
+          <p class="hint" style="margin-top:12px">Lo guardado y lo aprendido vive en este dispositivo. Para pasarlo a otro, exporta un respaldo aquí e impórtalo allá.</p>
+          <div class="saved" style="grid-template-columns:auto auto">
+            <button type="button" id="btnExport">Exportar respaldo</button>
+            <label class="filebtn"><span>Importar respaldo</span><input type="file" id="importFile" accept=".json,application/json"></label>
+          </div>
+        </details>
+      </section>
+
+      <section class="group">
+        <h2>Conceptos</h2>
+        <div class="freqbox">
+          <div class="freqhead"><span>Productos frecuentes</span><span class="hint" id="freqNote"></span></div>
+          <div class="freq" id="freq"></div>
+        </div>
+        <div class="add">
+          <input id="search" placeholder="Buscar en el catálogo: playera, bordado, gorra, poncho…" aria-label="Buscar producto">
+          <select id="addSel" aria-label="Producto para agregar"></select>
+          <button type="button" id="addBtn">Agregar</button>
+        </div>
+        <p class="hint">Cada producto trae los precios que ya cotizaste. Al escribir la cantidad se sugiere el de volumen más cercano; toca una referencia para usarla o escribe tu precio.</p>
+        <div class="lines" id="lines"></div>
+        <label class="check"><input type="checkbox" id="opciones"> Las líneas son opciones a elegir (no se suman)</label>
+      </section>
+
+      <section class="group">
+        <h2>Descuentos y cargos</h2>
+        <div class="fields three">
+          <label>Descuento general (%)<input id="descMan" class="num" inputmode="decimal" placeholder="0"></label>
+          <label>Cargo express (%)<input id="expressPct" class="num" inputmode="decimal" placeholder="30"></label>
+          <label>Entrega express en<input id="expressTxt" placeholder="1 semana"></label>
+        </div>
+        <div class="checks">
+          <label class="check"><input type="checkbox" id="volOn"> Aplicar descuento por volumen</label>
+          <label class="check"><input type="checkbox" id="expressOn"> Agregar cargo express desglosado</label>
+        </div>
+        <div class="segrow"><span>Cómo se ve el descuento en la hoja</span>
+          <div class="seg" role="group" aria-label="Presentación del descuento">
+            <button type="button" data-dm="int" aria-pressed="true">Ya incluido en el precio unitario</button>
+            <button type="button" data-dm="des" aria-pressed="false">Renglón de descuento</button>
+          </div>
+        </div>
+        <details class="box">
+          <summary>Escala de descuento por volumen</summary>
+          <p class="hint" style="margin-top:8px">Se aplica por renglón según sus piezas. Edita los porcentajes a tu política.</p>
+          <div class="tiers" id="tiers"></div>
+        </details>
+      </section>
+
+      <section class="group">
+        <h2>IVA y pago</h2>
+        <div class="segrow"><span>IVA</span>
+          <div class="seg" role="group" aria-label="IVA">
+            <button type="button" data-iva="mas" aria-pressed="true">Más IVA 16%</button>
+            <button type="button" data-iva="incl" aria-pressed="false">IVA incluido</button>
+            <button type="button" data-iva="sin" aria-pressed="false">Sin IVA</button>
+            <button type="button" data-iva="efe" aria-pressed="false">Efectivo sin factura</button>
+          </div>
+        </div>
+        <div class="segrow"><span>Anticipo</span>
+          <div class="seg" role="group" aria-label="Anticipo" id="antSeg">
+            <button type="button" data-ant="50">50%</button>
+            <button type="button" data-ant="70">70%</button>
+            <button type="button" data-ant="75">75%</button>
+            <button type="button" data-ant="100">100%</button>
+          </div>
+        </div>
+        <div class="fields">
+          <label>Anticipo exacto (%)<input id="anticipo" class="num" inputmode="numeric"></label>
+          <label>Forma de pago (opcional)<input id="formaPago" placeholder="Ej. transferencia o efectivo"></label>
+        </div>
+      </section>
+
+      <section class="group">
+        <h2>Entrega y condiciones</h2>
+        <div class="segrow"><span>Tiempo de entrega</span>
+          <div class="seg" role="group" aria-label="Tipo de entrega">
+            <button type="button" data-ent="dias" aria-pressed="true">Días hábiles</button>
+            <button type="button" data-ent="fecha" aria-pressed="false">Fecha</button>
+            <button type="button" data-ent="conf" aria-pressed="false">Por confirmar</button>
+            <button type="button" data-ent="no" aria-pressed="false">No mostrar</button>
+          </div>
+        </div>
+        <div class="fields">
+          <label id="diasWrap">Días hábiles<input id="dias" placeholder="Ej. 12 o 8–10"></label>
+          <label id="fechaEntWrap" hidden>Fecha de entrega<input id="fechaEnt" type="date"></label>
+        </div>
+        <div class="checks">
+          <label class="check"><input type="checkbox" id="incDiseno"> Diseño incluido</label>
+          <label class="check"><input type="checkbox" id="incPonchado"> Ponchado incluido</label>
+          <label class="check"><input type="checkbox" id="incEnvio"> Envío incluido</label>
+          <label class="check"><input type="checkbox" id="incMuestra"> Muestra o dummy antes de producir</label>
+          <label class="check"><input type="checkbox" id="tecnica"> Nota de técnica de serigrafía</label>
+          <label class="check"><input type="checkbox" id="fletes"> No incluye fletes foráneos</label>
+          <label class="check"><input type="checkbox" id="liquidacion"> Venta en firme sobre existencias</label>
+          <label class="check"><input type="checkbox" id="aprobacion" checked> Arte aprobado antes de producir</label>
+        </div>
+        <div class="fields">
+          <label class="wide">Escenarios de cantidad (opcional)<input id="escenarios" placeholder="Ej. 1000, 1500, 2000"></label>
+          <label class="wide">Notas para el cliente<textarea id="notas" placeholder="Ej. Distribución por talla a confirmar."></textarea></label>
+          <label class="wide">Mensaje de cierre<input id="cierre" placeholder="Quedo atento a tu confirmación."></label>
+        </div>
+      </section>
+    </form>
+
+    <div class="sheet-wrap">
+      <p class="sheet-label">Así sale la hoja para el cliente <span class="internal" id="internalSum"></span></p>
+      <article class="sheet" id="sheet" aria-label="Vista previa de la cotización"></article>
+    </div>
+  </div>
+
+  <section class="tq" id="tq" aria-labelledby="tqTitle">
+    <div class="tq-head">
+      <div><h2 id="tqTitle">Cotizador de serigrafía por tintas</h2>
+        <p class="hint">Tabla LN1. Elige piezas, posiciones, tamaño, número de tintas y efectos. El precio de venta es el costo de la tabla más el margen.</p></div>
+      <div class="tq-markup"><label>Margen sobre costo (%)<input id="tqMk" class="num" inputmode="decimal"></label></div>
+    </div>
+    <div class="tq-grid">
+      <div class="tq-form">
+        <div class="fields three">
+          <label>Piezas<input id="tqQty" class="num" inputmode="numeric"></label>
+          <label>Técnica<select id="tqTec">
+            <option value="Plastisol">Plastisol</option><option value="Base agua">Base agua (100% algodón)</option>
+            <option value="Vaselina / soft hand">Vaselina / soft hand (100% algodón)</option><option value="Descarga">Descarga (100% algodón)</option></select></label>
+          <label>Prenda<select id="tqPrenda">
+            <option value="clara">Clara (blanca o pastel)</option><option value="color">De color u oscura</option></select></label>
+        </div>
+        <label class="check"><input type="checkbox" id="tqFleece"> Prenda afelpada (fleece, sudadera o hoodie)</label>
+        <div id="tqPos" class="tq-pos"></div>
+        <button type="button" id="tqAddPos">Agregar posición</button>
+      </div>
+      <div class="tq-res" id="tqRes" aria-live="polite"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  // ---------- Catálogo: precios de venta en MXN por pieza, tomados de las cotizaciones entregadas ----------
+  const CATS = [
+    ['sub', 'Sublimación', 'SUB'], ['ser', 'Serigrafía y estampado', 'EST'], ['dtf', 'DTF y DTG', 'DTF'],
+    ['bor', 'Bordado', 'BOR'], ['gor', 'Gorras', 'GOR'], ['uni', 'Uniformes y línea ejecutiva', 'UNI'],
+    ['bas', 'Básicos 100% algodón (lisos)', 'FLC'], ['pro', 'Promocional y volumen', 'VOL'],
+    ['pon', 'Ponchos', 'PON'], ['hog', 'Morrales, sábanas y bolsas', 'MOR'], ['otr', 'Servicios y otros', 'COT']
+  ];
+  const P = [
+    ['sub_fp', 'sub', 'Playera sublimada full print', 'Sublimación total en frente, espalda y mangas. Confección incluida.', [[8,400,'Mario Murillo'],[10,210,'Pedido mixto'],[150,200,'UIEPA'],[150,220,'UIEPA · urgente'],[200,140,'UDAL · dry-fit microperforada']]],
+    ['sub_anti', 'sub', 'Playera sublimada, tela antimicrobial', 'Sublimación total, tela antimicrobial.', [[300,165,'UDAL']]],
+    ['sub_4w', 'sub', 'Playera tela repelente antimicrobial 4-way stretch', 'Combinación de colores a elegir.', [[300,165,'VAZBE']]],
+    ['sub_short', 'sub', 'Short tela repelente antimicrobial 4-way stretch', 'Color a elegir.', [[300,138,'VAZBE']]],
+    ['sub_polo', 'sub', 'Polo full print sublimada', 'Sublimación total.', [[50,199,'Joaquín Martínez']]],
+    ['sub_10', 'sub', 'Playera cuello redondo sublimada full', 'Sublimación total.', [[10,210,'Pedido mixto']]],
+
+    ['ser_hn', 'ser', 'Estampado serigrafía · hoodie negra, frente y espalda', 'Plastisol con base. Servicio sobre prenda del cliente.', [[1000,34,'Lista de serigrafía'],[1800,34,'Estampado DE-EST-0923']]],
+    ['ser_pn', 'ser', 'Estampado serigrafía · playera negra, frente y espalda', 'Plastisol con base. Servicio sobre prenda del cliente.', [[1000,38,'Lista de serigrafía'],[1800,38,'Estampado DE-EST-0923']]],
+    ['ser_pb', 'ser', 'Estampado serigrafía · playera blanca, frente y espalda', 'Servicio sobre prenda del cliente.', [[1000,34,'Lista de serigrafía'],[1800,34,'Estampado DE-EST-0923']]],
+    ['ser_fn', 'ser', 'Serigrafía · frente en prenda negra', 'Plastisol con base, una posición.', [[1000,14,'Lista de serigrafía']]],
+    ['ser_fb', 'ser', 'Serigrafía · frente en prenda blanca', 'Una posición.', [[1000,10,'Lista de serigrafía']]],
+    ['ser_eh', 'ser', 'Serigrafía · espalda hoodie negra', 'Plastisol con base, una posición.', [[1000,20,'Lista de serigrafía']]],
+    ['ser_ep', 'ser', 'Serigrafía · espalda playera', 'Una posición.', [[1000,24,'Lista de serigrafía']]],
+    ['ser_c5', 'ser', 'Serigrafía tamaño carta, 5 colores', 'Una posición, hasta 5 colores.', [[7000,13.5,'Pedido 7,000 pz']]],
+    ['ser_srv', 'ser', 'Servicio de estampado', 'Estampado sobre prenda del cliente.', [[192,40,'Mario Murillo']]],
+    ['ser_ml', 'ser', 'Playera manga larga con estampado', 'Prenda y estampado.', [[39,70,'Estampado 148 pz']]],
+    ['ser_polo', 'ser', 'Polo con estampado', 'Prenda y estampado.', [[10,60,'Estampado 148 pz']]],
+    ['ser_chal', 'ser', 'Chaleco con estampado', 'Prenda y estampado.', [[50,62,'Estampado 148 pz']]],
+
+    ['dtf_pl', 'dtf', 'Playera cuello redondo con DTF', 'Frente escudo, espalda carta y etiqueta.', [[30,190,'Hard Work']]],
+    ['dtf_cc', 'dtf', 'Playera Chilian Cotton con DTF', 'Frente tamaño escudo y espalda hasta doble carta.', [[22,299,'Emilio Slappy']]],
+    ['dtf_sud', 'dtf', 'Sudadera con DTF frente y espalda', 'Estampado DTF en frente y espalda.', [[20,370,'Hard Work']]],
+    ['dtg_hood', 'dtf', 'Sudadera con gorro sin cierre · bordado frente + DTG espalda', 'Bordado al frente e impresión DTG en la espalda.', [[90,430,'UIEPA Noche de las Estrellas']]],
+    ['dtf_gor', 'dtf', 'Gorra de esponja con DTF', 'Estampado DTF frontal.', [[0,33,'Lista de septiembre']]],
+
+    ['bor_polo', 'bor', 'Polo con bordado tamaño escudo', 'Un bordado al frente.', [[18,205,'Gaming Empire']]],
+    ['bor_nom', 'bor', 'Personalización de nombre bordado', 'Nombre por pieza.', [[6,50,'Gaming Empire']], { nopcs: true }],
+    ['bor_pon', 'bor', 'Ponchado (digitalización del logotipo)', 'Archivo de bordado del logotipo, pago único.', [[1,150,'Gaming Empire']], { nopcs: true, nodisc: true }],
+    ['bor_cam', 'bor', 'Camisa bordada', 'Bordado en pecho y manga.', [[8,400,'UIEPA'],[20,424,'UIEPA v2'],[33,380,'Camisas 33 pz']]],
+    ['bor_cr1', 'bor', 'Crewneck negra 50/50 bordada', 'Bordado al frente.', [[6,270,'Crewnecks y gorras']]],
+    ['bor_cr3', 'bor', 'Crewneck negra 50/50 · bordado frente + 2 mangas', 'Frente media carta y escudo en ambas mangas.', [[6,345,'Crewnecks y gorras']]],
+
+    ['gor_gab2', 'gor', 'Gorra de gabardina, bordado frente y atrás', 'Bordado en dos posiciones.', [[50,127,'Gorras de gabardina']]],
+    ['gor_gab', 'gor', 'Gorra de gabardina 100% algodón bordada', 'Bordado frontal.', [[12,97,'Crewnecks y gorras']]],
+    ['gor_mal', 'gor', 'Gorra de malla blanca, estampado frontal', 'Estampado al frente.', [[100,40,'Kit de campaña']]],
+    ['gor_est', 'gor', 'Gorra estampada', 'Estampado frontal.', [[450,25,'Gorras 450'],[3000,25,'Pedido 3,000 pz'],[21000,18.06,'Línea promocional']]],
+
+    ['uni_cej', 'uni', 'Camisa ejecutiva custom', 'Dama y caballero.', [[40,468,'Línea ejecutiva']]],
+    ['uni_pej', 'uni', 'Polo ejecutiva custom', 'Dama y caballero.', [[40,389,'Línea ejecutiva']]],
+    ['uni_polo', 'uni', 'Polo', 'Con logotipo.', [[13,200,'UIEPA'],[50,212,'UIEPA v2']]],
+    ['uni_esc', 'uni', 'Uniforme de escolta', 'Uniforme completo.', [[6,4000,'UIEPA']]],
+    ['uni_cha', 'uni', 'Chamarra con estampado', 'Prenda y estampado.', [[10,760,'Pedido mixto']]],
+    ['uni_cmc', 'uni', 'Camisa manga corta con estampado', 'Prenda y estampado.', [[10,360,'Pedido mixto']]],
+    ['uni_pe', 'uni', 'Playera con estampado', 'Prenda y estampado.', [[10,185,'Pedido mixto']]],
+
+    ['bas_pan', 'bas', 'Pants 100% algodón 320 gsm', 'Prenda lisa, sin personalización.', [[600,177.8,'Línea algodón']], { v: [['French terry · open',177.8],['French terry · peinado',210.7],['Felpa · open',218.05],['Felpa · peinado',250.6]] }],
+    ['bas_hoo', 'bas', 'Hoodie 100% algodón 320 gsm', 'Prenda lisa, sin personalización.', [[600,205.8,'Línea algodón']], { v: [['French terry · open',205.8],['French terry · peinado',238.7],['Felpa · open',245.7],['Felpa · peinado',278.6]] }],
+    ['bas_cre', 'bas', 'Sudadera cuello redondo 100% algodón 320 gsm', 'Prenda lisa, sin personalización.', [[600,191.8,'Línea algodón']], { v: [['French terry · open',191.8],['French terry · peinado',224.7],['Felpa · open',231.7],['Felpa · peinado',264.6]] }],
+    ['bas_pla', 'bas', 'Playera jersey 190–200 gsm 100% algodón', 'Prenda lisa, sin personalización.', [[600,86.8,'Línea algodón']], { v: [['Open',86.8],['Peinado',89.6]] }],
+
+    ['pro_cam', 'pro', 'Playera de campaña 50/50, 140 gsm', 'Playera lisa.', [[500,22,'Playera de campaña']]],
+    ['pro_came', 'pro', 'Playera de campaña 140 gsm estampada', 'Frente escudo y espalda carta.', [[100,45,'Kit de campaña']]],
+    ['pro_bla', 'pro', 'Playera blanca 50/50 140 gsm estampada', 'Frente carta y espalda doble carta, hasta 5 colores.', [[0,45.5,'Lista de septiembre']]],
+    ['pro_col', 'pro', 'Playera de color 50/50 150 gsm estampada', 'Frente carta y espalda doble carta, hasta 5 colores con base.', [[0,55.5,'Lista de septiembre']]],
+    ['pro_pol', 'pro', 'Playera poliéster sin tapa costura', 'Playera lisa.', [[1000,26,'Playera poliéster']]],
+    ['pro_pl', 'pro', 'Playera promocional', 'Estampada.', [[21000,29.56,'Línea promocional']]],
+    ['pro_som', 'pro', 'Sombrilla promocional', 'Impresa.', [[21000,38.56,'Línea promocional']]],
+    ['pro_bol', 'pro', 'Bolsa ecológica', 'Impresa.', [[21000,15.46,'Línea promocional']]],
+    ['pro_vas', 'pro', 'Vaso estampado 4 tintas', 'Impresión a 4 tintas.', [[80000,1.35,'Vasos 80,000']]],
+    ['pro_ter', 'pro', 'Vaso con estampado', 'Vaso y estampado.', [[20,170,'Pedido mixto']]],
+    ['pro_tnn', 'pro', 'Bolsa TNT sublimada · producción nacional', 'Sourcing y producción en México.', [[50000,44,'Bolsas TNT']]],
+    ['pro_tnc', 'pro', 'Bolsa TNT sublimada · producción China', 'Sourcing y producción en China.', [[100000,35,'Bolsas TNT']]],
+
+    ['pon_exp', 'pon', 'Poncho · servicio express', 'Producción express.', [[500,165,'Ponchos · primera versión'],[500,150,'Ponchos express']]],
+    ['pon_fan', 'pon', 'Poncho sublimado Fan Cape', 'Tela microfibra, impresión a una cara.', [[1100,100,'Fan Cape']]],
+    ['pon_dob', 'pon', 'Poncho sublimado doble cara, tela fusionada', 'Impresión a dos caras.', [[10000,186,'Fan Cape · versión inicial']]],
+    ['pon_liq', 'pon', 'Poncho México "10" · liquidación', 'Venta en firme sobre existencias.', [[3000,70,'Liquidación']]],
+
+    ['mor_full', 'hog', 'Morral full sublimado, tela memory repelente', 'Ojillos metálicos y cordón incluidos.', [[21000,31,'Gabriela']]],
+    ['mor_1t', 'hog', 'Morral estampado 1 tinta, tela memory repelente', 'Ojillos metálicos y cordón incluidos.', [[21000,25,'Gabriela']]],
+    ['mor_vol', 'hog', 'Morral promocional', 'Impreso.', [[21000,21.06,'Línea promocional']]],
+    ['hog_sab', 'hog', 'Sábana sublimada, tela memory', 'Sublimación total.', [[1000,123,'Sábanas']]],
+
+    ['ser_calc', 'ser', 'Estampado serigrafía', 'Cotizado por tintas, tamaño y efectos.', [], { nodisc: true, hidden: true }],
+    ['otr_env', 'otr', 'Envío express', 'Paquetería express a domicilio.', [[1,600,'Emilio Slappy']], { nopcs: true, nodisc: true, noexp: true }],
+    ['otr_lib', 'otr', 'Concepto libre', '', [], {}]
+  ].map(a => Object.assign({ key: a[0], cat: a[1], name: a[2], desc: a[3], refs: a[4] }, a[5] || {}));
+  const byKey = Object.fromEntries(P.map(p => [p.key, p]));
+  const catOf = Object.fromEntries(CATS.map(c => [c[0], c]));
+  CATS.push(['apr', 'Aprendidos de tus cotizaciones', 'COT']); catOf.apr = CATS[CATS.length - 1];
+
+  // ---------- Aprendizaje: cada cotización guardada o descargada alimenta precios, frecuentes, productos nuevos y clientes ----------
+  const LEARN = 'de-cotizador-aprendizaje-v1';
+  const getL = () => { try { const r = localStorage.getItem(LEARN); const v = r ? JSON.parse(r) : null; if (v && Array.isArray(v.e)) return v; } catch (e) {} return { e: [], c: {} }; };
+  let LRN = getL();
+  const putL = () => { try { localStorage.setItem(LEARN, JSON.stringify(LRN)); } catch (e) {} };
+  const slug = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+  function itemOf(k) {
+    if (byKey[k]) return byKey[k];
+    if (String(k).startsWith('u:')) { const last = LRN.e.filter(x => x.k === k).pop();
+      return { key: k, cat: 'apr', name: last ? last.n : k.slice(2), desc: last ? last.d || '' : '', refs: [], learned: true }; }
+    return null;
+  }
+  function refsOf(it) {
+    if (!it) return [];
+    const mine = LRN.e.filter(x => x.k === it.key && x.p > 0).map(x => [x.q, x.p, (x.cl || 'Sin cliente') + ' · ' + x.f.slice(5).split('-').reverse().join('/'), true, x.t]);
+    return (it.refs || []).concat(mine);
+  }
+  function customItems() {
+    const seen = {}; LRN.e.forEach(x => { if (x.k.startsWith('u:')) seen[x.k] = 1; });
+    return Object.keys(seen).map(itemOf);
+  }
+  const allItems = () => P.filter(p => !p.hidden).concat(customItems());
+  // frecuencia: cada referencia histórica cuenta una vez; cada cotización tuya aprendida cuenta doble y los últimos 90 días suman más
+  function frequent(max) {
+    const score = {}; const now = Date.now();
+    P.forEach(p => { if (p.key !== 'otr_lib' && !p.hidden) score[p.key] = (p.refs || []).length; });
+    LRN.e.forEach(x => { const age = (now - (x.t || now)) / 864e5; score[x.k] = (score[x.k] || 0) + (age < 90 ? 3 : 2); });
+    return Object.entries(score).filter(([k, v]) => v > 0 && itemOf(k) && !itemOf(k).hidden).sort((a, b) => b[1] - a[1]).slice(0, max).map(([k]) => itemOf(k));
+  }
+  function learnNow(why) {
+    const f = state.f; const folio = f.folio || ('SF-' + Date.now());
+    const t0 = Date.now(); const cl = (f.cliente || '').replace(/\[.*?\]/g, '').trim();
+    if (state.example) return false;
+    LRN.e = LRN.e.filter(x => x.fo !== folio);
+    state.lines.forEach(l => {
+      let k = l.key;
+      if (k === 'otr_lib') { if (!String(l.concept).trim()) return; k = 'u:' + slug(l.concept); l.key = k; }
+      LRN.e.push({ fo: folio, k, n: l.concept || '', d: l.desc || '', q: n(l.qty), p: n(l.price), cl: cl && !/corresponda/i.test(cl) ? cl : '', f: f.fecha || today(), t: t0 });
+    });
+    if (cl && !/corresponda/i.test(cl)) LRN.c[cl.toLowerCase()] = { name: cl, iva: state.iva, dm: state.dm, ent: state.ent, f: { anticipo: f.anticipo, dias: f.dias, formaPago: f.formaPago, expressPct: f.expressPct },
+      flags: Object.assign({}, state.flags, { opciones: false }), t: t0 };
+    if (LRN.e.length > 3000) LRN.e = LRN.e.slice(-3000);
+    putL(); renderFreq(); fillAdd(); fillClients(); return true;
+  }
+
+  // ---------- Utilidades ----------
+  const $ = (id) => document.getElementById(id);
+  const n = (v) => { const x = parseFloat(String(v ?? '').replace(/[,$\s]/g, '')); return Number.isFinite(x) ? x : 0; };
+  const r2 = (v) => Math.round(v * 100) / 100;
+  const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 2 });
+  const money = (v) => fmt.format(v || 0);
+  const int = (v) => Number(v || 0).toLocaleString('es-MX');
+  const MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+  const longDate = (iso) => { if (!iso) return ''; const [y, m, d] = iso.split('-').map(Number); return d + ' de ' + MES[m - 1] + ' de ' + y; };
+  const capDate = (iso) => { if (!iso) return ''; const [y, m, d] = iso.split('-').map(Number); return String(d).padStart(2, '0') + ' · ' + MES[m - 1].toUpperCase() + ' · ' + y; };
+  const STORE = 'de-cotizador-v1', SAVED = 'de-cotizador-guardadas-v1', TIERS = 'de-cotizador-escala-v1';
+  const load = (k) => { try { const r = localStorage.getItem(k); return r ? JSON.parse(r) : null; } catch (e) { return null; } };
+  const put = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+
+  let TIER = load(TIERS) || [[1, 0], [100, 0], [500, 3], [1000, 5], [5000, 8], [20000, 10]];
+  const volPct = (q) => { let p = 0; TIER.forEach(([m, pct]) => { if (q >= m) p = n(pct); }); return p; };
+
+  // precio sugerido: la referencia de mayor volumen que no pasa la cantidad; si la cantidad es menor a todas, la de menor volumen
+  function suggest(item, qty, vi) {
+    if (item.v) return { p: item.v[vi || 0][1], ref: null };
+    const refs = refsOf(item).slice().sort((a, b) => a[0] - b[0]);
+    if (!refs.length) return null;
+    let pick = refs[0];
+    refs.forEach(r => { if (qty >= r[0]) pick = r; });
+    const same = refs.filter(r => r[0] === pick[0]);
+    if (same.length > 1) { const learned = same.filter(r => r[3]).sort((a, b) => (b[4] || 0) - (a[4] || 0)); pick = learned.length ? learned[0] : same.reduce((a, b) => (b[1] < a[1] ? b : a)); }
+    return { p: pick[1], ref: pick };
+  }
+
+  let uid = 0;
+  function mkLine(key, qty) {
+    const it = itemOf(key); const rf = refsOf(it); const q = qty ?? (rf[0] && rf[0][0] > 0 ? rf[0][0] : 1);
+    const s = suggest(it, q, 0);
+    return { id: ++uid, key, concept: key === 'otr_lib' ? '' : it.name, desc: it.desc, qty: String(q), price: s ? String(s.p) : '', manual: false, vi: 0, cost: '', factor: '1.4' };
+  }
+
+  const DEF = () => ({ example: false, folioManual: false, f: { cliente: '', folio: '', titulo: '', subtitulo: '', fecha: today(), tallas: '', intro: '',
+      descMan: '', expressPct: '30', expressTxt: '1 semana', anticipo: '70', formaPago: '', dias: '', fechaEnt: '', escenarios: '', notas: '', cierre: '' },
+    flags: { opciones: false, volOn: false, expressOn: false, incDiseno: false, incPonchado: false, incEnvio: false, incMuestra: false, tecnica: false, fletes: false, liquidacion: false, aprobacion: true },
+    dm: 'int', iva: 'mas', ent: 'dias', lines: [] });
+  function example() {
+    const s = DEF(); s.example = true;
+    Object.assign(s.f, { cliente: '[Ejemplo] A quien corresponda', dias: '12', tallas: '' });
+    s.flags.tecnica = true;
+    s.lines = [mkLine('ser_hn', 1800), mkLine('ser_pb', 1800), mkLine('ser_pn', 1800)];
+    return s;
+  }
+  let state = load(STORE);
+  if (!state || !state.f || !Array.isArray(state.lines)) state = example();
+  else { const d = DEF(); state.f = Object.assign(d.f, state.f); state.flags = Object.assign(d.flags, state.flags || {}); state.lines.forEach(l => { l.id = ++uid; }); }
+  const save = () => put(STORE, state);
+
+  // ---------- Cálculos ----------
+  function calc() {
+    const md = Math.min(100, Math.max(0, n(state.f.descMan))) / 100;
+    const rows = state.lines.map((l, i) => {
+      const it = itemOf(l.key) || {}; const qty = n(l.qty); const unit = n(l.price);
+      const vd = state.flags.volOn && !it.nodisc ? volPct(qty) / 100 : 0;
+      const dp = it.nodisc ? 0 : 1 - (1 - vd) * (1 - md);
+      const gross = qty * unit, disc = gross * dp, net = gross - disc;
+      const expr = state.flags.expressOn && !it.noexp ? net * n(state.f.expressPct) / 100 : 0;
+      return { l, it, i, qty, unit, dp, vd, gross, disc, net, expr, priced: String(l.price).trim() !== '', unitNet: unit * (1 - dp) };
+    });
+    const pcs = rows.filter(x => !x.it.nopcs).reduce((a, x) => a + x.qty, 0);
+    const integ = state.dm === 'int';
+    const goods = rows.reduce((a, x) => a + (integ ? x.net : x.gross), 0);
+    const disc = integ ? 0 : rows.reduce((a, x) => a + x.disc, 0);
+    const expr = rows.reduce((a, x) => a + x.expr, 0);
+    const ant = Math.min(100, Math.max(0, n(state.f.anticipo) || 0));
+    const taxed = (sub) => {
+      if (state.iva === 'mas') { const iva = sub * 0.16; return { base: sub, iva, total: sub + iva }; }
+      if (state.iva === 'incl') { const base = sub / 1.16; return { base, iva: sub - base, total: sub }; }
+      return { base: sub, iva: 0, total: sub };
+    };
+    const sub = goods - disc + expr; const t = taxed(sub);
+    const opts = rows.map(x => { const s = x.net + x.expr; const tt = taxed(s); return { x, sub: s, ...tt, antAmt: tt.total * ant / 100, rest: tt.total - tt.total * ant / 100 }; });
+    const cost = rows.reduce((a, x) => a + n(x.l.cost) * x.qty, 0);
+    return { rows, pcs, goods, disc, expr, sub, ...t, ant, antAmt: t.total * ant / 100, rest: t.total - t.total * ant / 100, opts, cost, hasCost: rows.some(x => n(x.l.cost) > 0), base0: goods - disc + expr };
+  }
+  const letter = (i) => String.fromCharCode(65 + i);
+  const scenarios = () => String(state.f.escenarios || '').split(/[,;\s]+/).map(n).filter(x => x > 0).slice(0, 4);
+
+  function autoFolio() {
+    if (state.folioManual) return;
+    const first = state.lines[0] && itemOf(state.lines[0].key);
+    const code = first && catOf[first.cat] ? catOf[first.cat][2] : 'COT';
+    const iso = state.f.fecha || today();
+    state.f.folio = 'DE-' + code + '-' + iso.slice(5, 7) + iso.slice(8, 10);
+    $('folio').value = state.f.folio;
+  }
+
+  function entregaTxt() {
+    if (state.ent === 'no') return '';
+    if (state.ent === 'conf') return 'Por confirmar';
+    if (state.ent === 'fecha') return state.f.fechaEnt ? longDate(state.f.fechaEnt) : 'Por confirmar';
+    const d = String(state.f.dias || '').trim(); if (!d) return 'Por confirmar';
+    return d + ' días hábiles a partir del anticipo y el arte aprobado';
+  }
+  function entregaCorta() {
+    if (state.flags.expressOn && state.f.expressTxt) return state.f.expressTxt + ' (express)';
+    if (state.ent === 'dias' && String(state.f.dias || '').trim()) return state.f.dias + ' días hábiles';
+    if (state.ent === 'fecha' && state.f.fechaEnt) { const [y, m, d] = state.f.fechaEnt.split('-').map(Number); return d + ' ' + MES[m - 1].slice(0, 3) + ' ' + y; }
+    return '';
+  }
+  function ivaNote() {
+    return { mas: 'Precios más IVA (16%) en pesos mexicanos (MXN)', incl: 'Precios con IVA incluido, en pesos mexicanos (MXN)', sin: 'Precios sin IVA, en pesos mexicanos (MXN)',
+      efe: 'Pago en efectivo sin factura. Si requieres factura se agrega el IVA (16%)' }[state.iva];
+  }
+  function payTxt(t) {
+    if (t.ant >= 100) return '100% de anticipo para iniciar producción';
+    if (t.ant <= 0) return 'Pago contra entrega';
+    return t.ant + '% de anticipo para iniciar producción · ' + (100 - t.ant) + '% contra entrega';
+  }
+  function introTxt(t) {
+    if (state.f.intro.trim()) return state.f.intro.trim();
+    const names = t.rows.map(x => (x.l.concept || 'concepto').toLowerCase());
+    if (!names.length) return '';
+    if (state.flags.opciones) return 'Se presentan ' + names.length + ' opciones para tu pedido. Cada una muestra su inversión y su esquema de pago; eliges una para la producción.';
+    const list = t.rows.filter(x => !x.it.nopcs).map(x => int(x.qty) + ' ' + (x.l.concept || '').toLowerCase());
+    return 'Cotización para la fabricación de ' + (list.length ? list.join(', ').replace(/, ([^,]*)$/, ' y $1') : names.join(', ')) + ', conforme al arte aprobado por el cliente.';
+  }
+  function condiciones(t) {
+    const rows = [];
+    const qty = t.rows.filter(x => !x.it.nopcs).map(x => int(x.qty) + ' ' + (x.l.concept || '').toLowerCase());
+    if (qty.length && state.flags.opciones) rows.push(['Cantidad', qty.join(' · ') + ' (según la opción elegida)']);
+    if (state.f.tallas.trim()) rows.push(['Tallas', state.f.tallas.trim()]);
+    rows.push(['Precios', ivaNote()]);
+    rows.push(['Condiciones de pago', payTxt(t) + (state.f.formaPago.trim() ? ' · ' + state.f.formaPago.trim() : '')]);
+    const e = entregaTxt();
+    if (state.flags.expressOn) rows.push(['Tiempo de entrega', 'Express: ' + (state.f.expressTxt || 'por confirmar') + (e ? ' · Normal: ' + e : '')]);
+    else if (e) rows.push(['Tiempo de entrega', e]);
+    if (state.flags.opciones) rows.push(['Elección', 'Una opción para toda la producción']);
+    const inc = [];
+    if (state.flags.incDiseno) inc.push('diseño'); if (state.flags.incPonchado) inc.push('ponchado'); if (state.flags.incEnvio) inc.push('envío');
+    if (inc.length) rows.push(['Incluye', inc.join(', ').replace(/^./, c => c.toUpperCase()).replace(/, ([^,]*)$/, ' y $1')]);
+    if (state.flags.tecnica) rows.push(['Técnica', 'Plastisol con base en prenda de color. En prenda 100% algodón puede cambiarse a base agua, vaselina o descarga al mismo precio']);
+    if (state.flags.incMuestra) rows.push(['Muestra', 'Muestra física o dummy aprobado por el cliente antes de producir']);
+    if (state.flags.aprobacion) rows.push(['Aprobación', 'Arte y prueba de color confirmados por el cliente antes de producir']);
+    if (state.flags.liquidacion) rows.push(['Venta', 'En firme sobre existencias disponibles']);
+    if (state.flags.fletes) rows.push(['No incluye', 'Fletes foráneos y maniobras especiales (se cotizan según destino)']);
+    if (state.iva === 'mas' || state.iva === 'incl') rows.push(['Facturación', 'Enviar comprobante de pago, constancia de situación fiscal y uso de CFDI']);
+    return rows;
+  }
+
+  // ---------- Formulario ----------
+  const FIELDS = ['cliente', 'folio', 'titulo', 'subtitulo', 'fecha', 'tallas', 'intro', 'descMan', 'expressPct', 'expressTxt', 'anticipo', 'formaPago', 'dias', 'fechaEnt', 'escenarios', 'notas', 'cierre'];
+  const FLAGS = ['opciones', 'volOn', 'expressOn', 'incDiseno', 'incPonchado', 'incEnvio', 'incMuestra', 'tecnica', 'fletes', 'liquidacion', 'aprobacion'];
+  function fill() {
+    FIELDS.forEach(k => { $(k).value = state.f[k] ?? ''; });
+    FLAGS.forEach(k => { $(k).checked = !!state.flags[k]; });
+    syncSegs();
+  }
+  function syncSegs() {
+    document.querySelectorAll('[data-dm]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.dm === state.dm)));
+    document.querySelectorAll('[data-iva]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.iva === state.iva)));
+    document.querySelectorAll('[data-ent]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.ent === state.ent)));
+    document.querySelectorAll('[data-ant]').forEach(b => b.setAttribute('aria-pressed', String(n(b.dataset.ant) === n(state.f.anticipo))));
+    $('diasWrap').hidden = state.ent !== 'dias'; $('fechaEntWrap').hidden = state.ent !== 'fecha';
+  }
+  FIELDS.forEach(k => $(k).addEventListener('input', () => {
+    state.f[k] = $(k).value; state.example = false;
+    if (k === 'folio') state.folioManual = true;
+    if (k === 'fecha') autoFolio();
+    if (k === 'anticipo') syncSegs();
+    refresh();
+  }));
+  FLAGS.forEach(k => $(k).addEventListener('change', () => { state.flags[k] = $(k).checked; state.example = false; refresh(); }));
+  document.querySelectorAll('[data-dm]').forEach(b => b.addEventListener('click', () => { state.dm = b.dataset.dm; syncSegs(); refresh(); }));
+  document.querySelectorAll('[data-iva]').forEach(b => b.addEventListener('click', () => { state.iva = b.dataset.iva; syncSegs(); refresh(); }));
+  document.querySelectorAll('[data-ent]').forEach(b => b.addEventListener('click', () => { state.ent = b.dataset.ent; syncSegs(); refresh(); }));
+  document.querySelectorAll('[data-ant]').forEach(b => b.addEventListener('click', () => { state.f.anticipo = b.dataset.ant; $('anticipo').value = b.dataset.ant; syncSegs(); refresh(); }));
+
+  // escala de volumen
+  function renderTiers() {
+    const box = $('tiers'); box.textContent = '';
+    TIER.forEach((t, i) => {
+      const lab = document.createElement('label');
+      lab.textContent = 'Desde ' + int(t[0]) + ' pz (%)';
+      const inp = document.createElement('input'); inp.className = 'num'; inp.inputMode = 'decimal'; inp.id = 'tier-' + i; inp.value = String(t[1]);
+      inp.addEventListener('input', () => { TIER[i][1] = n(inp.value); put(TIERS, TIER); refresh(); });
+      lab.appendChild(inp); box.appendChild(lab);
+    });
+  }
+
+  // catálogo
+  function fillAdd() {
+    const q = $('search').value.trim().toLowerCase(); const sel = $('addSel'); const keep = sel.value; sel.textContent = '';
+    CATS.forEach(c => {
+      const items = allItems().filter(p => p.cat === c[0] && (!q || (p.name + ' ' + p.desc + ' ' + c[1] + ' ' + refsOf(p).map(r => r[2]).join(' ')).toLowerCase().includes(q)));
+      if (!items.length) return;
+      const g = document.createElement('optgroup'); g.label = c[1];
+      items.forEach(p => { const o = document.createElement('option'); o.value = p.key;
+        const rf = refsOf(p); const s = p.v ? p.v[0][1] : (rf.length ? Math.min(...rf.map(r => r[1])) : null);
+        o.textContent = p.name + (s != null ? ' · desde ' + money(s) : ''); g.appendChild(o); });
+      sel.appendChild(g);
+    });
+    if (!sel.options.length) { const o = document.createElement('option'); o.value = ''; o.textContent = 'Sin resultados; usa "Concepto libre"'; sel.appendChild(o); }
+    if ([...sel.options].some(o => o.value === keep)) sel.value = keep;
+  }
+  $('search').addEventListener('input', fillAdd);
+  $('addBtn').addEventListener('click', () => {
+    const k = $('addSel').value || 'otr_lib'; state.lines.push(mkLine(k)); state.example = false;
+    autoFolio(); renderLines(); refresh();
+    const last = document.querySelector('#lines .line:last-child input[id^="q-"]'); if (last) last.focus();
+  });
+
+  function renderLines() {
+    const box = $('lines'); box.textContent = '';
+    if (!state.lines.length) { const p = document.createElement('p'); p.className = 'hint'; p.textContent = 'Busca un producto y agrégalo para empezar.'; box.appendChild(p); return; }
+    state.lines.forEach((l, idx) => {
+      const it = itemOf(l.key) || { refs: [] };
+      const row = document.createElement('div'); row.className = 'line';
+      const tag = document.createElement('div'); tag.className = 'tag full';
+      tag.textContent = (state.flags.opciones ? 'Opción ' + letter(idx) + ' · ' : '') + (catOf[it.cat] ? catOf[it.cat][1] : 'Concepto');
+      row.appendChild(tag);
+      const mk = (cls, label, value, attrs) => { const lab = document.createElement('label'); lab.className = cls; lab.textContent = label;
+        const inp = document.createElement('input'); Object.entries(attrs).forEach(([k, v]) => inp.setAttribute(k, v)); inp.value = value; lab.appendChild(inp); row.appendChild(lab); return inp; };
+      const iC = mk('concept', 'Concepto', l.concept, { id: 'c-' + l.id });
+      const iQ = mk('qty', 'Piezas', l.qty, { id: 'q-' + l.id, class: 'num', inputmode: 'numeric' });
+      const iP = mk('price', 'Precio unitario', l.price, { id: 'p-' + l.id, class: 'num', inputmode: 'decimal', placeholder: 'A cotizar' });
+      const del = document.createElement('button'); del.type = 'button'; del.className = 'del'; del.textContent = '×'; del.setAttribute('aria-label', 'Quitar ' + (l.concept || 'concepto'));
+      row.appendChild(del);
+      const iD = mk('full', 'Descripción para el cliente', l.desc, { id: 'd-' + l.id });
+
+      if (it.v) {
+        const lab = document.createElement('label'); lab.className = 'full'; lab.textContent = 'Tela y tipo de hilo';
+        const s = document.createElement('select'); s.id = 'v-' + l.id;
+        it.v.forEach((v, i) => { const o = document.createElement('option'); o.value = i; o.textContent = v[0] + ' · ' + money(v[1]); s.appendChild(o); });
+        s.value = String(l.vi || 0);
+        s.addEventListener('change', () => { l.vi = n(s.value); l.price = String(it.v[l.vi][1]); l.manual = false; iP.value = l.price;
+          l.desc = it.v[l.vi][0] + '. ' + it.desc; iD.value = l.desc; refresh(); });
+        lab.appendChild(s); row.appendChild(lab);
+      }
+
+      const refs = document.createElement('div'); refs.className = 'refs full';
+      const paint = () => {
+        refs.textContent = '';
+        const RF = refsOf(it);
+        if (RF.length && !it.v) {
+          const lead = document.createElement('span'); lead.textContent = 'Cotizado:'; refs.appendChild(lead);
+          RF.slice().sort((a, b) => a[0] - b[0] || (b[4] || 0) - (a[4] || 0)).slice(0, 10).forEach(r => {
+            const b = document.createElement('button'); b.type = 'button';
+            b.textContent = (r[0] > 0 ? int(r[0]) + ' pz · ' : '') + money(r[1]) + (r[2] ? ' · ' + r[2] : '');
+            if (n(l.price) === r[1]) b.className = 'on';
+            if (r[3]) b.title = 'Aprendido de una cotización guardada';
+            b.addEventListener('click', () => { l.price = String(r[1]); l.manual = true; iP.value = l.price; paint(); refresh(); });
+            refs.appendChild(b);
+          });
+        }
+        const vd = state.flags.volOn && !it.nodisc ? volPct(n(l.qty)) : 0;
+        if (vd > 0) { const f = document.createElement('span'); f.className = 'flag'; f.textContent = 'Volumen: −' + vd + '%'; refs.appendChild(f); }
+      };
+      paint(); row.appendChild(refs);
+
+      const det = document.createElement('details'); det.className = 'cost full';
+      const sm = document.createElement('summary'); sm.textContent = 'Costeo interno (no sale en la hoja)'; det.appendChild(sm);
+      const crow = document.createElement('div'); crow.className = 'crow';
+      const mkc = (label, val, id) => { const lab = document.createElement('label'); lab.textContent = label; const inp = document.createElement('input'); inp.className = 'num'; inp.inputMode = 'decimal'; inp.id = id; inp.value = val; lab.appendChild(inp); crow.appendChild(lab); return inp; };
+      const iCo = mkc('Costo por pieza', l.cost, 'co-' + l.id);
+      const iFa = mkc('Factor', l.factor || '1.4', 'fa-' + l.id);
+      const mg = document.createElement('div'); mg.className = 'internal';
+      const ap = document.createElement('button'); ap.type = 'button'; ap.textContent = 'Usar costo × factor';
+      crow.appendChild(mg); crow.appendChild(ap); det.appendChild(crow); row.appendChild(det);
+      const paintM = () => { const c = n(l.cost), p = n(l.price); mg.textContent = c > 0 && p > 0 ? 'Margen ' + Math.round((p - c) / p * 100) + '% · ' + money(p - c) + '/pz' : ''; };
+      paintM();
+      iCo.addEventListener('input', () => { l.cost = iCo.value; paintM(); refresh(); });
+      iFa.addEventListener('input', () => { l.factor = iFa.value; });
+      ap.addEventListener('click', () => { if (n(l.cost) > 0) { l.price = String(r2(n(l.cost) * (n(l.factor) || 1.4))); l.manual = true; iP.value = l.price; paint(); paintM(); refresh(); } });
+
+      iC.addEventListener('input', () => { l.concept = iC.value; refresh(); });
+      iD.addEventListener('input', () => { l.desc = iD.value; refresh(); });
+      iP.addEventListener('input', () => { l.price = iP.value; l.manual = true; paint(); paintM(); refresh(); });
+      iQ.addEventListener('input', () => { l.qty = iQ.value;
+        if (!l.manual && !it.v) { const s = suggest(it, n(l.qty), l.vi); if (s) { l.price = String(s.p); iP.value = l.price; } }
+        paint(); refresh(); });
+      del.addEventListener('click', () => { state.lines = state.lines.filter(x => x !== l); autoFolio(); renderLines(); refresh(); });
+      box.appendChild(row);
+    });
+  }
+  $('opciones').addEventListener('change', renderLines);
+  $('volOn').addEventListener('change', renderLines);
+
+  // ---------- Hoja ----------
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const MONO = '<svg viewBox="0 0 240 260" width="40" height="43" aria-hidden="true"><g fill="#fff"><rect x="24" y="20" width="46" height="220" rx="4"/><rect x="24" y="20" width="124" height="46" rx="4"/><rect x="24" y="194" width="124" height="46" rx="4"/><rect x="24" y="107" width="94" height="46" rx="4"/><path d="M 144 20 A 110 110 0 0 1 144 240 L 144 194 A 64 64 0 0 0 144 66 Z"/></g></svg>';
+  // título automático según los productos: uno → su nombre; dos o tres → "A y B"; mucha variedad → "Pedido [cliente]"
+  function autoTitle() {
+    const L = state.lines.filter(l => { const it = itemOf(l.key); return !(it && it.nopcs) && String(l.concept || '').trim(); });
+    if (!L.length) return { t: 'Cotización', s: '' };
+    const short = (c) => String(c).split(' · ')[0].split(',')[0].trim();
+    const qual = (c) => { const p = String(c).split(' · '); return p.length > 1 ? p[1].split(',')[0].trim() : ''; };
+    const low = (x) => x.charAt(0).toLowerCase() + x.slice(1);
+    const join = (a) => a.length > 1 ? a.slice(0, -1).join(', ') + ' y ' + a[a.length - 1] : (a[0] || '');
+    const uniq = (a) => a.filter((x, i) => x && a.indexOf(x) === i);
+    const shorts = uniq(L.map(l => short(l.concept)));
+    const pcs = L.reduce((a, l) => a + n(l.qty), 0);
+    const opt = state.flags.opciones ? L.length + ' opciones' : '';
+    if (shorts.length === 1) {
+      const qs = uniq(L.map(l => qual(l.concept)));
+      const it = itemOf(L[0].key); const cat = it && catOf[it.cat] ? low(catOf[it.cat][1]) : '';
+      return { t: shorts[0], s: opt || (qs.length ? join(qs) : cat) };
+    }
+    const both = shorts[0] + ' y ' + low(shorts[1]);
+    if (shorts.length === 2 && both.length <= 62) return { t: both, s: opt || int(pcs) + ' piezas' };
+    if (shorts.length === 3) { const three = shorts[0] + ', ' + low(shorts[1]) + ' y ' + low(shorts[2]); if (three.length <= 62) return { t: three, s: opt || int(pcs) + ' piezas' }; }
+    const cl = (state.f.cliente || '').replace(/\[.*?\]/g, '').trim();
+    return { t: cl && !/corresponda/i.test(cl) ? 'Pedido ' + cl : 'Pedido mixto', s: opt || shorts.length + ' productos · ' + int(pcs) + ' piezas' };
+  }
+  function title() { return state.f.titulo.trim() || autoTitle().t; }
+  function subtitle() { return state.f.titulo.trim() ? state.f.subtitulo.trim() : (state.f.subtitulo.trim() || autoTitle().s); }
+
+  function renderSheet() {
+    const t = calc(); const f = state.f; const s = $('sheet'); s.textContent = '';
+    const mh = el('div', 'mh'); s.appendChild(mh);
+    const row = el('div', 'mh-row'); mh.appendChild(row);
+    const br = el('div', 'mh-brand'); br.innerHTML = MONO;
+    const bt = el('div'); bt.append(el('div', 'mh-name', 'DIEGO ENRICO'), el('div', 'mh-sub', 'SOLUCIONES CREATIVAS')); br.appendChild(bt);
+    const doc = el('div', 'mh-doc'); doc.appendChild(el('b', null, 'COTIZACIÓN')); doc.appendChild(el('br')); doc.append('FOLIO ' + (f.folio || '')); doc.appendChild(el('br')); doc.append(capDate(f.fecha));
+    row.append(br, doc);
+    const h = el('div', 'mh-title', title()); const st = subtitle(); if (st) { h.append(' '); h.appendChild(el('span', null, '/ ' + st)); } mh.appendChild(h);
+    const at = autoTitle(); $('titulo').placeholder = 'Automático: ' + at.t; $('subtitulo').placeholder = state.f.titulo.trim() ? 'Opcional' : (at.s ? 'Automático: ' + at.s : 'Opcional');
+    const meta = el('div', 'mh-meta'); mh.appendChild(meta);
+    const cell = (k, v, ex) => { const c = el('div'); c.append(el('span', 'mk', k)); const vv = el('span', 'mv', v); if (ex) vv.appendChild(el('span', 'ex', 'EJEMPLO')); c.appendChild(vv); meta.appendChild(c); };
+    cell('Cliente', f.cliente.trim() || 'A quien corresponda', state.example);
+    cell('Cantidad', t.pcs ? int(t.pcs) + ' piezas' : '—');
+    cell('Anticipo', t.ant + '%');
+    if (state.flags.opciones) cell('Opciones', String(t.rows.length));
+    else cell(entregaCorta() && state.iva !== 'mas' ? 'Entrega' : 'Total', entregaCorta() && state.iva !== 'mas' ? entregaCorta() : money(t.total));
+
+    const sb = el('div', 'sb'); s.appendChild(sb);
+    const it = introTxt(t); if (it) sb.appendChild(el('p', 'intro', it));
+
+    // tabla de inversión
+    const sec = el('div'); const sl = el('div', 'sl', 'Inversión '); sl.appendChild(el('span', null, '/ precios en MXN')); sec.appendChild(sl);
+    const tb = el('div', 'tbox'); const table = el('table', 'data'); tb.appendChild(table); sec.appendChild(tb); sb.appendChild(sec);
+    const hr = el('tr'); [['Concepto', 'l'], ['Unitario', ''], ['Cantidad', ''], ['Importe', '']].forEach(([x, c]) => { const th = el('th', c, x); th.scope = 'col'; hr.appendChild(th); }); table.appendChild(hr);
+    if (!t.rows.length) { const tr = el('tr'); const td = el('td', 'empty', 'Sin conceptos todavía.'); td.colSpan = 4; tr.appendChild(td); table.appendChild(tr); }
+    const integ = state.dm === 'int';
+    t.rows.forEach((x, i) => {
+      const tr = el('tr'); const td = el('td', 'l');
+      td.appendChild(el('div', 'c', (state.flags.opciones ? letter(i) + ' · ' : '') + (x.l.concept || 'Concepto')));
+      if (x.l.desc) td.appendChild(el('div', 'd', x.l.desc));
+      const u = integ ? x.unitNet : x.unit, imp = integ ? x.net : x.gross;
+      tr.append(td, el('td', null, x.priced ? money(u) : 'A cotizar'), el('td', null, int(x.qty)), el('td', null, x.priced ? money(imp) : '—'));
+      table.appendChild(tr);
+    });
+    const trow = (k, v, cls) => { const tr = el('tr', cls); const a = el('td', 'l', k); a.colSpan = 3; tr.append(a, el('td', null, v)); table.appendChild(tr); };
+    if (state.flags.opciones) {
+      // resumen por opción
+      const sec2 = el('div'); const s2 = el('div', 'sl', 'Inversión por opción '); s2.appendChild(el('span', null, '/ ' + (state.iva === 'mas' ? 'con IVA' : state.iva === 'incl' ? 'IVA incluido' : 'sin IVA'))); sec2.appendChild(s2);
+      const tb2 = el('div', 'tbox'); const t2 = el('table', 'data'); tb2.appendChild(t2); sec2.appendChild(tb2); sb.appendChild(sec2);
+      const h2 = el('tr'); const cols = ['Opción', 'Subtotal'].concat(state.iva === 'mas' || state.iva === 'incl' ? ['IVA'] : []).concat(['Total', 'Anticipo ' + t.ant + '%']).concat(t.ant < 100 ? ['Saldo'] : []);
+      cols.forEach((c, i) => { const th = el('th', i ? '' : 'l', c); th.scope = 'col'; h2.appendChild(th); }); t2.appendChild(h2);
+      t.opts.forEach((o, i) => { const tr = el('tr'); tr.appendChild(el('td', 'l', letter(i) + ' · ' + (o.x.l.concept || 'Opción')));
+        tr.appendChild(el('td', null, money(o.base))); if (state.iva === 'mas' || state.iva === 'incl') tr.appendChild(el('td', null, money(o.iva)));
+        tr.appendChild(el('td', null, money(o.total))); tr.appendChild(el('td', null, money(o.antAmt))); if (t.ant < 100) tr.appendChild(el('td', null, money(o.rest))); t2.appendChild(tr); });
+    } else if (t.rows.length) {
+      const showSub = !integ && t.disc > 0 || t.expr > 0 || state.iva === 'mas' || state.iva === 'incl';
+      if (showSub) trow(state.iva === 'incl' ? 'Subtotal sin IVA' : 'Subtotal', money(state.iva === 'incl' ? t.base : t.goods), 'sub');
+      if (!integ && t.disc > 0 && state.iva !== 'incl') trow('Descuento', '- ' + money(t.disc), 'sub');
+      if (t.expr > 0 && state.iva !== 'incl') trow('Cargo express +' + n(f.expressPct) + '% (entrega ' + (f.expressTxt || 'express') + ')', money(t.expr), 'sub');
+      if (state.iva === 'mas' || state.iva === 'incl') trow('IVA 16%', money(t.iva), 'sub');
+      const tt = el('tr', 'total'); const a = el('td', 'l', 'TOTAL'); a.colSpan = 2; tt.append(a, el('td', null, int(t.pcs)), el('td', null, money(t.total))); table.appendChild(tt);
+    }
+
+    // escenarios
+    const sc = scenarios();
+    if (sc.length && !state.flags.opciones && t.rows.length) {
+      const sec3 = el('div'); const s3 = el('div', 'sl', 'Inversión por volumen '); s3.appendChild(el('span', null, '/ ' + sc.length + ' escenarios · sin IVA')); sec3.appendChild(s3);
+      const tb3 = el('div', 'tbox'); const t3 = el('table', 'data'); tb3.appendChild(t3); sec3.appendChild(tb3); sb.appendChild(sec3);
+      const h3 = el('tr'); h3.appendChild(el('th', 'l', 'Concepto')); sc.forEach(q => h3.appendChild(el('th', null, int(q) + ' pz'))); t3.appendChild(h3);
+      const tot = sc.map(() => 0);
+      t.rows.filter(x => !x.it.nopcs).forEach(x => { const tr = el('tr'); tr.appendChild(el('td', 'l', x.l.concept || 'Concepto'));
+        sc.forEach((q, i) => { const v = x.unitNet * q; tot[i] += v; tr.appendChild(el('td', null, money(v))); }); t3.appendChild(tr); });
+      const tr = el('tr', 'total'); tr.appendChild(el('td', 'l', 'TOTAL')); tot.forEach(v => tr.appendChild(el('td', null, money(v)))); t3.appendChild(tr);
+    }
+
+    // esquema de pago
+    if (!state.flags.opciones && t.rows.length) {
+      const sec4 = el('div'); const s4 = el('div', 'sl', 'Esquema de pago '); s4.appendChild(el('span', null, '/ ' + (t.ant >= 100 ? '100% anticipo' : t.ant + '% anticipo · ' + (100 - t.ant) + '% contra entrega'))); sec4.appendChild(s4);
+      const pay = el('div', 'pay');
+      const box = (k, v, nn) => { const d = el('div'); d.append(el('div', 'pk', k), el('div', 'pv', v), el('div', 'pn', nn)); pay.appendChild(d); };
+      box('Anticipo ' + t.ant + '%', money(t.antAmt), 'Para iniciar producción.');
+      if (t.ant < 100) box('Saldo ' + (100 - t.ant) + '%', money(t.rest), 'Contra entrega.'); else box('Total', money(t.total), state.iva === 'mas' ? 'IVA incluido en el total.' : ivaNote() + '.');
+      sec4.appendChild(pay); sb.appendChild(sec4);
+    }
+
+    // condiciones
+    const sec5 = el('div'); sec5.appendChild(el('div', 'sl', 'Condiciones comerciales'));
+    const ct = el('table', 'cond'); condiciones(t).forEach(([k, v]) => { const tr = el('tr'); tr.append(el('td', 'k', k), el('td', 'v', v)); ct.appendChild(tr); });
+    sec5.appendChild(ct); sb.appendChild(sec5);
+    if (f.notas.trim()) { const sec6 = el('div'); sec6.append(el('div', 'sl', 'Notas'), el('p', 'intro', f.notas.trim())); sb.appendChild(sec6); }
+
+    const cl = el('div', 'closing');
+    cl.append(el('div', 'ct', f.cierre.trim() || closingTitle()), el('div', 'cc', closingText(t)), el('div', 'co', 'DIEGO ENRICO · SOLUCIONES CREATIVAS · PUEBLA, MÉXICO · +52 222 413 1126'));
+    sb.appendChild(cl);
+    sb.appendChild((() => { const ft = el('div', 'foot'); ft.append(el('span', null, 'DIEGO ENRICO · SOLUCIONES CREATIVAS'), el('span', null, 'Cotización ' + (f.folio || ''))); return ft; })());
+
+    // resumen interno (no en la hoja)
+    const ins = $('internalSum');
+    if (t.hasCost && !state.flags.opciones) { const m = t.base0 - t.cost; ins.textContent = '· Interno: costo ' + money(t.cost) + ', margen ' + money(m) + (t.base0 > 0 ? ' (' + Math.round(m / t.base0 * 100) + '%)' : ''); }
+    else ins.textContent = '';
+  }
+  function closingTitle() { const c = state.f.cliente.trim(); const first = c && !/corresponda|\[/i.test(c) ? c.split(' ')[0] : ''; return 'Quedo atento a tu confirmación' + (first ? ', ' + first : '') + '.'; }
+  function closingText(t) {
+    if (state.flags.opciones) return 'Con la opción elegida y el anticipo cubierto, arrancamos la producción.';
+    return 'Con el arte aprobado y el anticipo cubierto, arrancamos la producción' + (t.pcs ? ' de las ' + int(t.pcs) + ' piezas.' : '.');
+  }
+
+  let stT; function status(msg, keep) { const s = $('status'); s.textContent = msg; clearTimeout(stT); if (msg && !keep) stT = setTimeout(() => { s.textContent = ''; }, 4500); }
+  function refresh() { renderSheet(); save(); }
+
+  // ---------- Guardadas ----------
+  function savedList() { return load(SAVED) || []; }
+  function fillSaved() {
+    const sel = $('savedSel'); sel.textContent = ''; const L = savedList();
+    if (!L.length) { const o = document.createElement('option'); o.value = ''; o.textContent = 'Aún no hay cotizaciones guardadas'; sel.appendChild(o); return; }
+    L.forEach((x, i) => { const o = document.createElement('option'); o.value = String(i); o.textContent = x.folio + ' · ' + x.cliente + ' · ' + money(x.total); sel.appendChild(o); });
+  }
+  $('btnSave').addEventListener('click', () => {
+    const t = calc(); const L = savedList().filter(x => x.folio !== state.f.folio);
+    L.unshift({ folio: state.f.folio || 'Sin folio', cliente: state.f.cliente || 'A quien corresponda', total: t.total, state: JSON.parse(JSON.stringify(state)) });
+    put(SAVED, L.slice(0, 200)); fillSaved(); learnNow(); status('Guardada en este dispositivo: ' + (state.f.folio || 'sin folio') + '. Precios aprendidos.');
+  });
+  $('btnLoad').addEventListener('click', () => { const L = savedList(); const x = L[n($('savedSel').value)]; if (!x) return;
+    state = JSON.parse(JSON.stringify(x.state)); state.lines.forEach(l => { l.id = ++uid; }); fill(); renderLines(); refresh(); status('Abierta ' + x.folio + '.'); });
+  let delArm = false;
+  $('btnDel').addEventListener('click', () => { const L = savedList(); const i = n($('savedSel').value); if (!L[i]) return;
+    if (!delArm) { delArm = true; $('delAsk').hidden = false; $('delAsk').textContent = 'Toca Borrar otra vez para eliminar ' + L[i].folio + '.'; setTimeout(() => { delArm = false; $('delAsk').hidden = true; }, 4000); return; }
+    L.splice(i, 1); put(SAVED, L); delArm = false; $('delAsk').hidden = true; fillSaved(); status('Cotización borrada.'); });
+
+  $('btnNew').addEventListener('click', () => { state = DEF(); fill(); autoFolio(); renderLines(); refresh(); status('Cotización nueva.'); $('cliente').focus(); });
+
+  // ---------- Texto para WhatsApp o correo ----------
+  function asText() {
+    const t = calc(); const f = state.f; const o = [];
+    o.push('COTIZACIÓN ' + (f.folio || '') + ' · ' + longDate(f.fecha));
+    o.push('Diego Enrico · Soluciones Creativas');
+    o.push('Cliente: ' + (f.cliente.trim() || 'A quien corresponda'));
+    o.push('');
+    const integ = state.dm === 'int';
+    t.rows.forEach((x, i) => o.push('• ' + (state.flags.opciones ? 'Opción ' + letter(i) + ': ' : '') + (x.l.concept || 'Concepto') + ' · ' + int(x.qty) + ' pz × ' + money(integ ? x.unitNet : x.unit) + ' = ' + money(integ ? x.net : x.gross)));
+    o.push('');
+    if (state.flags.opciones) t.opts.forEach((x, i) => o.push('Opción ' + letter(i) + ': total ' + money(x.total) + ' · anticipo ' + t.ant + '% ' + money(x.antAmt)));
+    else {
+      if (!integ && t.disc > 0) o.push('Descuento: -' + money(t.disc));
+      if (t.expr > 0) o.push('Cargo express +' + n(f.expressPct) + '%: ' + money(t.expr));
+      if (state.iva === 'mas') { o.push('Subtotal: ' + money(t.sub)); o.push('IVA 16%: ' + money(t.iva)); }
+      o.push('Total: ' + money(t.total) + (state.iva === 'incl' ? ' (IVA incluido)' : state.iva === 'sin' ? ' (sin IVA)' : state.iva === 'efe' ? ' (efectivo, sin factura)' : ''));
+      o.push(t.ant >= 100 ? 'Pago: 100% de anticipo (' + money(t.antAmt) + ')' : 'Pago: ' + t.ant + '% de anticipo (' + money(t.antAmt) + ') y ' + (100 - t.ant) + '% contra entrega (' + money(t.rest) + ')');
+    }
+    const e = state.flags.expressOn ? 'Express: ' + (f.expressTxt || '') : entregaTxt(); if (e) o.push('Entrega: ' + e);
+    if (f.tallas.trim()) o.push('Tallas: ' + f.tallas.trim());
+    if (f.notas.trim()) { o.push(''); o.push(f.notas.trim()); }
+    o.push(''); o.push('+52 222 413 1126');
+    return o.join('\n');
+  }
+  $('btnCopy').addEventListener('click', () => {
+    const txt = asText();
+    const fb = () => { const ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('aria-label', 'Texto de la cotización'); ta.style.cssText = 'position:fixed;inset:15% 8% auto;height:60%;width:84%;z-index:20'; document.body.appendChild(ta); ta.select(); status('Selecciona el texto y cópialo; toca fuera para cerrar.', true); ta.addEventListener('blur', () => ta.remove()); };
+    learnNow();
+    try { navigator.clipboard.writeText(txt).then(() => status('Texto copiado. Pégalo en WhatsApp o en un correo.'), fb); } catch (e) { fb(); }
+  });
+
+  // ---------- Generador de PDF propio (sin internet): Helvetica estándar, WinAnsi ----------
+  const HW = { normal: [278, 278, 355, 556, 556, 889, 667, 191, 333, 333, 389, 584, 278, 333, 278, 278, 556, 556, 556, 556, 556, 556, 556, 556, 556, 556, 278, 278, 584, 584, 584, 556, 1015, 667, 667, 722, 722, 667, 611, 778, 722, 278, 500, 667, 556, 833, 722, 778, 667, 778, 722, 667, 611, 722, 667, 944, 667, 667, 611, 278, 278, 278, 469, 556, 333, 556, 556, 500, 556, 556, 278, 556, 556, 222, 222, 500, 222, 833, 556, 556, 556, 556, 333, 500, 278, 556, 500, 722, 500, 500, 500, 334, 260, 334, 584, 761, 556, 556, 222, 556, 333, 1000, 556, 556, 333, 1000, 667, 333, 1000, 556, 611, 556, 556, 222, 222, 333, 333, 350, 556, 1000, 333, 1000, 500, 333, 944, 556, 500, 667, 278, 333, 556, 556, 556, 556, 260, 556, 333, 737, 370, 556, 584, 333, 737, 333, 400, 584, 333, 333, 333, 556, 537, 278, 333, 333, 365, 556, 834, 834, 834, 611, 667, 667, 667, 667, 667, 667, 1000, 722, 667, 667, 667, 667, 278, 278, 278, 278, 722, 722, 778, 778, 778, 778, 778, 584, 778, 722, 722, 722, 722, 667, 667, 611, 556, 556, 556, 556, 556, 556, 889, 500, 556, 556, 556, 556, 278, 278, 278, 278, 556, 556, 556, 556, 556, 556, 556, 584, 611, 556, 556, 556, 556, 500, 556, 500], bold: [278, 333, 474, 556, 556, 889, 722, 238, 333, 333, 389, 584, 278, 333, 278, 278, 556, 556, 556, 556, 556, 556, 556, 556, 556, 556, 333, 333, 584, 584, 584, 611, 975, 722, 722, 722, 722, 667, 611, 778, 722, 278, 556, 722, 611, 833, 722, 778, 667, 778, 722, 667, 611, 722, 667, 944, 667, 667, 611, 333, 278, 333, 584, 556, 333, 556, 611, 556, 611, 556, 333, 611, 611, 278, 278, 556, 278, 889, 611, 611, 611, 611, 389, 556, 333, 611, 556, 778, 556, 556, 500, 389, 280, 389, 584, 761, 556, 556, 278, 556, 500, 1000, 556, 556, 333, 1000, 667, 333, 1000, 556, 611, 556, 556, 278, 278, 500, 500, 350, 556, 1000, 333, 1000, 556, 333, 944, 556, 500, 667, 278, 333, 556, 556, 556, 556, 280, 556, 333, 737, 370, 556, 584, 333, 737, 333, 400, 584, 333, 333, 333, 611, 556, 278, 333, 333, 365, 556, 834, 834, 834, 611, 722, 722, 722, 722, 722, 722, 1000, 722, 667, 667, 667, 667, 278, 278, 278, 278, 722, 722, 778, 778, 778, 778, 778, 584, 778, 722, 722, 722, 722, 667, 667, 611, 556, 556, 556, 556, 556, 556, 889, 556, 556, 556, 556, 556, 278, 278, 278, 278, 611, 611, 611, 611, 611, 611, 611, 584, 611, 611, 611, 611, 611, 556, 611, 556] };
+  const CP = { 0x20AC: 0x80, 0x201A: 0x82, 0x0192: 0x83, 0x201E: 0x84, 0x2026: 0x85, 0x2020: 0x86, 0x2021: 0x87, 0x02C6: 0x88, 0x2030: 0x89, 0x0160: 0x8A, 0x2039: 0x8B, 0x0152: 0x8C, 0x017D: 0x8E,
+    0x2018: 0x91, 0x2019: 0x92, 0x201C: 0x93, 0x201D: 0x94, 0x2022: 0x95, 0x2013: 0x96, 0x2014: 0x97, 0x02DC: 0x98, 0x2122: 0x99, 0x0161: 0x9A, 0x203A: 0x9B, 0x0153: 0x9C, 0x017E: 0x9E, 0x0178: 0x9F, 0x2212: 0x2D, 0x2265: 0x3E, 0x2264: 0x3C };
+  const enc = (str) => { const o = []; for (const ch of String(str)) { const c = ch.codePointAt(0); if (c === 0xB2) { o.push(50); continue; } if (c < 128 || (c >= 160 && c < 256)) o.push(c); else if (CP[c]) o.push(CP[c]); else o.push(63); } return o; };
+  class MiniPDF {
+    constructor(w, h) { this.W = w; this.H = h; this.pages = [[]]; this.cur = 0; this.font = 'normal'; this.size = 10; this.tc = '0 0 0'; }
+    _o(s) { this.pages[this.cur].push(s); }
+    _c(r, g, b) { return (r / 255).toFixed(3) + ' ' + (g / 255).toFixed(3) + ' ' + (b / 255).toFixed(3); }
+    setFont(_, st) { this.font = st === 'bold' ? 'bold' : 'normal'; }
+    setFontSize(s) { this.size = s; }
+    setTextColor(r, g, b) { this.tc = this._c(r, g, b); }
+    setFillColor(r, g, b) { this._o(this._c(r, g, b) + ' rg'); }
+    setDrawColor(r, g, b) { this._o(this._c(r, g, b) + ' RG'); }
+    setLineWidth(w) { this._o(w + ' w'); }
+    getTextWidth(t) { const w = HW[this.font]; let s = 0; enc(t).forEach(c => { s += c >= 32 ? w[c - 32] : 0; }); return s * this.size / 1000; }
+    splitTextToSize(t, max) {
+      const out = []; String(t).split('\n').forEach(par => { let line = '';
+        par.split(' ').forEach(word => { const tryL = line ? line + ' ' + word : word;
+          if (this.getTextWidth(tryL) <= max || !line) line = tryL; else { out.push(line); line = word; } });
+        out.push(line); });
+      return out;
+    }
+    text(t, x, y, o) {
+      o = o || {}; const lines = Array.isArray(t) ? t : [t]; const cs = o.charSpace || 0; const lh = this.size * 1.15;
+      lines.forEach((ln, i) => { const b = enc(ln); let w = this.getTextWidth(ln) + cs * b.length; let xx = x;
+        if (o.align === 'right') xx = x - w; else if (o.align === 'center') xx = x - w / 2;
+        let str = ''; b.forEach(c => { if (c === 40 || c === 41 || c === 92) str += '\\' + String.fromCharCode(c); else if (c < 32 || c > 126) str += '\\' + c.toString(8).padStart(3, '0'); else str += String.fromCharCode(c); });
+        this._o('BT /' + (this.font === 'bold' ? 'F2' : 'F1') + ' ' + this.size + ' Tf ' + cs + ' Tc ' + this.tc + ' rg ' + xx.toFixed(2) + ' ' + (this.H - y - i * lh).toFixed(2) + ' Td (' + str + ') Tj ET'); });
+    }
+    rect(x, y, w, h, st) { this._o(x.toFixed(2) + ' ' + (this.H - y - h).toFixed(2) + ' ' + w.toFixed(2) + ' ' + h.toFixed(2) + ' re ' + (st === 'F' ? 'f' : 'S')); }
+    line(x1, y1, x2, y2) { this._o(x1.toFixed(2) + ' ' + (this.H - y1).toFixed(2) + ' m ' + x2.toFixed(2) + ' ' + (this.H - y2).toFixed(2) + ' l S'); }
+    roundedRect(x, y, w, h, r, _, st) { const k = 0.5523 * r, H = this.H, X = (v) => v.toFixed(2), Y = (v) => (H - v).toFixed(2);
+      this._o([X(x + r), Y(y), 'm', X(x + w - r), Y(y), 'l', X(x + w - r + k), Y(y), X(x + w), Y(y + r - k), X(x + w), Y(y + r), 'c', X(x + w), Y(y + h - r), 'l',
+        X(x + w), Y(y + h - r + k), X(x + w - r + k), Y(y + h), X(x + w - r), Y(y + h), 'c', X(x + r), Y(y + h), 'l', X(x + r - k), Y(y + h), X(x), Y(y + h - r + k), X(x), Y(y + h - r), 'c',
+        X(x), Y(y + r), 'l', X(x), Y(y + r - k), X(x + r - k), Y(y), X(x + r), Y(y), 'c', st === 'F' ? 'f' : 'S'].join(' ')); }
+    mono(x0, y0, w) { // monograma DE en vectores
+      const s = w / 240, P = (px, py) => (x0 + px * s).toFixed(2) + ' ' + (this.H - (y0 + py * s)).toFixed(2);
+      this._o('1 1 1 rg'); [[24, 20, 46, 220], [24, 20, 124, 46], [24, 194, 124, 46], [24, 107, 94, 46]].forEach(r => this.rect(x0 + r[0] * s, y0 + r[1] * s, r[2] * s, r[3] * s, 'F'));
+      const k = 0.5523, cx = 144, cy = 130, R = 110, r = 64;
+      this._o([P(cx, cy - R), 'm', P(cx + k * R, cy - R), P(cx + R, cy - k * R), P(cx + R, cy), 'c', P(cx + R, cy + k * R), P(cx + k * R, cy + R), P(cx, cy + R), 'c', P(cx, cy + r), 'l',
+        P(cx + k * r, cy + r), P(cx + r, cy + k * r), P(cx + r, cy), 'c', P(cx + r, cy - k * r), P(cx + k * r, cy - r), P(cx, cy - r), 'c', 'h f'].join(' ')); }
+    addPage() { this.pages.push([]); this.cur = this.pages.length - 1; }
+    getNumberOfPages() { return this.pages.length; }
+    setPage(i) { this.cur = i - 1; }
+    output() {
+      const objs = []; const add = (s) => { objs.push(s); return objs.length; };
+      add('<< /Type /Catalog /Pages 2 0 R >>'); add('');
+      add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
+      add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
+      const kids = [];
+      this.pages.forEach(pg => { const body = pg.join('\n'); const c = add('<< /Length ' + body.length + ' >>\nstream\n' + body + '\nendstream');
+        kids.push(add('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + this.W + ' ' + this.H + '] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ' + c + ' 0 R >>')); });
+      objs[1] = '<< /Type /Pages /Kids [' + kids.map(k => k + ' 0 R').join(' ') + '] /Count ' + kids.length + ' >>';
+      let out = '%PDF-1.4\n'; const off = [];
+      objs.forEach((o, i) => { off.push(out.length); out += (i + 1) + ' 0 obj\n' + o + '\nendobj\n'; });
+      const xr = out.length; out += 'xref\n0 ' + (objs.length + 1) + '\n0000000000 65535 f \n' + off.map(o => String(o).padStart(10, '0') + ' 00000 n \n').join('');
+      out += 'trailer\n<< /Size ' + (objs.length + 1) + ' /Root 1 0 R >>\nstartxref\n' + xr + '\n%EOF';
+      const u = new Uint8Array(out.length); for (let i = 0; i < out.length; i++) u[i] = out.charCodeAt(i) & 255; return u.buffer;
+    }
+  }
+
+  // ---------- PDF en el formato Diego Enrico ----------
+  let monoPng = null;
+  function mono() {
+    if (monoPng) return monoPng;
+    try { const c = document.createElement('canvas'); c.width = 240; c.height = 260; const x = c.getContext('2d'); x.fillStyle = '#fff';
+      const rr = (a, b, w, h) => { x.beginPath(); if (x.roundRect) x.roundRect(a, b, w, h, 4); else x.rect(a, b, w, h); x.fill(); };
+      rr(24, 20, 46, 220); rr(24, 20, 124, 46); rr(24, 194, 124, 46); rr(24, 107, 94, 46);
+      x.fill(new Path2D('M 144 20 A 110 110 0 0 1 144 240 L 144 194 A 64 64 0 0 0 144 66 Z'));
+      monoPng = c.toDataURL('image/png'); } catch (e) { monoPng = ''; }
+    return monoPng;
+  }
+  function buildPdf() {
+    const doc = new MiniPDF(595.28, 841.89);
+    const t = calc(); const f = state.f; const W = 595.28, H = 841.89, M = 48; let y;
+    const ink = [24, 24, 27], band = [16, 16, 18], muted = [113, 113, 122], light = [161, 161, 170], line = [236, 236, 239], grey = [185, 185, 189];
+    const integ = state.dm === 'int';
+    const txt = (s, x, yy, o) => doc.text(Array.isArray(s) ? s : String(s), x, yy, o || {});
+    const set = (style, size, color) => { doc.setFont('helvetica', style); doc.setFontSize(size); doc.setTextColor(...color); };
+    const head = (first) => {
+      const bh = first ? 168 : 70;
+      doc.setFillColor(...band); doc.rect(0, 0, W, bh, 'F');
+      doc.mono(M, 30, 34);
+      set('bold', 13, [255, 255, 255]); txt('DIEGO ENRICO', M + 46, 46, { charSpace: 3.2 });
+      set('normal', 5.6, grey); txt('SOLUCIONES CREATIVAS', M + 46, 58, { charSpace: 2.6 });
+      set('bold', 6.5, [255, 255, 255]); txt('COTIZACIÓN', W - M, 38, { align: 'right', charSpace: 1.8 });
+      set('normal', 6.5, grey); txt('FOLIO ' + (f.folio || ''), W - M, 50, { align: 'right', charSpace: 1.8 }); txt(capDate(f.fecha), W - M, 62, { align: 'right', charSpace: 1.8 });
+      if (!first) { y = bh + 30; return; }
+      const tt = title(); set('bold', 18, [255, 255, 255]); txt(tt, M, 100);
+      const st = subtitle(); if (st) { const w = doc.getTextWidth(tt + ' '); set('normal', 18, [154, 154, 160]); const room = W - 2 * M - w; const sl = doc.splitTextToSize('/ ' + st, room > 120 ? room : W - 2 * M); if (room > 120) txt(sl[0], M + w, 100); }
+      doc.setDrawColor(42, 42, 46); doc.setLineWidth(0.6); doc.line(M, 114, W - M, 114);
+      const cells = [['CLIENTE', f.cliente.trim() || 'A quien corresponda'], ['CANTIDAD', t.pcs ? int(t.pcs) + ' piezas' : '—'], ['ANTICIPO', t.ant + '%'],
+        state.flags.opciones ? ['OPCIONES', String(t.rows.length)] : (entregaCorta() && state.iva !== 'mas' ? ['ENTREGA', entregaCorta()] : ['TOTAL', money(t.total)])];
+      const cw = (W - 2 * M) / 4;
+      cells.forEach((c, i) => { set('normal', 5.6, [134, 134, 140]); txt(c[0], M + i * cw, 130, { charSpace: 1.8 }); set('bold', 9.5, [255, 255, 255]); txt(doc.splitTextToSize(c[1], cw - 8)[0], M + i * cw, 145); });
+      y = bh + 30;
+    };
+    const need = (h) => { if (y + h > H - 60) { doc.addPage(); head(false); } };
+    const secLabel = (a, b) => { need(40); set('bold', 6.5, ink); txt(a.toUpperCase(), M, y, { charSpace: 2.4 }); if (b) { const w = doc.getTextWidth(a.toUpperCase()) + a.length * 2.4 + 6; set('normal', 6.5, light); txt(b.toUpperCase(), M + w, y, { charSpace: 2.4 }); }
+      y += 5; doc.setDrawColor(...band); doc.setLineWidth(1.2); doc.line(M, y, W - M, y); y += 13; };
+    head(true);
+
+    const it = introTxt(t); if (it) { set('normal', 9.2, [63, 63, 70]); const L = doc.splitTextToSize(it, W - 2 * M); txt(L, M, y); y += L.length * 11 + 12; }
+
+    // tabla
+    secLabel('Inversión', '/ precios en MXN');
+    const cx = { u: W - M - 170, q: W - M - 90, a: W - M - 8 };
+    const thead = () => { doc.setFillColor(...band); doc.rect(M, y - 11, W - 2 * M, 20, 'F'); set('bold', 6.2, [255, 255, 255]);
+      txt('CONCEPTO', M + 8, y + 2, { charSpace: 0.8 }); txt('UNITARIO', cx.u, y + 2, { align: 'right', charSpace: 0.8 }); txt('CANTIDAD', cx.q, y + 2, { align: 'right', charSpace: 0.8 }); txt('IMPORTE', cx.a, y + 2, { align: 'right', charSpace: 0.8 }); y += 26; };
+    thead();
+    const dw = cx.u - M - 80;
+    t.rows.forEach((x, i) => {
+      set('bold', 9, ink); const cL = doc.splitTextToSize((state.flags.opciones ? letter(i) + ' · ' : '') + (x.l.concept || 'Concepto'), dw);
+      set('normal', 7.8, muted); const dL = x.l.desc ? doc.splitTextToSize(x.l.desc, dw) : [];
+      const h = cL.length * 11 + dL.length * 9.5 + 10; if (y + h > H - 60) { doc.addPage(); head(false); thead(); }
+      set('bold', 9, ink); txt(cL, M + 8, y);
+      set('normal', 9, ink); txt(x.priced ? money(integ ? x.unitNet : x.unit) : 'A cotizar', cx.u, y, { align: 'right' }); txt(int(x.qty), cx.q, y, { align: 'right' }); txt(x.priced ? money(integ ? x.net : x.gross) : '—', cx.a, y, { align: 'right' });
+      if (dL.length) { set('normal', 7.8, muted); txt(dL, M + 8, y + cL.length * 11); }
+      y += h - 6; doc.setDrawColor(...line); doc.setLineWidth(0.6); doc.line(M, y, W - M, y); y += 13;
+    });
+    const tr = (k, v) => { need(20); set('normal', 9, [82, 82, 91]); txt(k, M + 8, y); txt(v, cx.a, y, { align: 'right' }); y += 7; doc.setDrawColor(...line); doc.line(M, y, W - M, y); y += 12; };
+    if (!state.flags.opciones && t.rows.length) {
+      const showSub = !integ && t.disc > 0 || t.expr > 0 || state.iva === 'mas' || state.iva === 'incl';
+      if (showSub) tr(state.iva === 'incl' ? 'Subtotal sin IVA' : 'Subtotal', money(state.iva === 'incl' ? t.base : t.goods));
+      if (!integ && t.disc > 0 && state.iva !== 'incl') tr('Descuento', '- ' + money(t.disc));
+      if (t.expr > 0 && state.iva !== 'incl') tr('Cargo express +' + n(f.expressPct) + '% (entrega ' + (f.expressTxt || 'express') + ')', money(t.expr));
+      if (state.iva === 'mas' || state.iva === 'incl') tr('IVA 16%', money(t.iva));
+      need(26); doc.setFillColor(...band); doc.rect(M, y - 13, W - 2 * M, 22, 'F'); set('bold', 10, [255, 255, 255]);
+      txt('TOTAL', M + 8, y + 1); txt(int(t.pcs), cx.q, y + 1, { align: 'right' }); txt(money(t.total), cx.a, y + 1, { align: 'right' }); y += 30;
+    }
+    if (state.flags.opciones && t.rows.length) {
+      y += 6; secLabel('Inversión por opción', state.iva === 'mas' ? '/ con IVA' : state.iva === 'incl' ? '/ IVA incluido' : '/ sin IVA');
+      const hasIva = state.iva === 'mas' || state.iva === 'incl';
+      const cols = ['OPCIÓN', 'SUBTOTAL'].concat(hasIva ? ['IVA'] : []).concat(['TOTAL', 'ANTICIPO ' + t.ant + '%']).concat(t.ant < 100 ? ['SALDO'] : []);
+      const nc = cols.length - 1; const right = W - M - 8; const step = (W - 2 * M - 150) / nc;
+      doc.setFillColor(...band); doc.rect(M, y - 11, W - 2 * M, 20, 'F'); set('bold', 6.2, [255, 255, 255]);
+      cols.forEach((c, i) => i ? txt(c, right - (nc - i) * step, y + 2, { align: 'right', charSpace: 0.6 }) : txt(c, M + 8, y + 2, { charSpace: 0.6 })); y += 26;
+      t.opts.forEach((o, i) => { need(24); const vals = [money(o.base)].concat(hasIva ? [money(o.iva)] : []).concat([money(o.total), money(o.antAmt)]).concat(t.ant < 100 ? [money(o.rest)] : []);
+        set('bold', 9, ink); txt(doc.splitTextToSize(letter(i) + ' · ' + (o.x.l.concept || ''), 140)[0], M + 8, y); set('normal', 9, ink);
+        vals.forEach((v, j) => txt(v, right - (nc - 1 - j) * step, y, { align: 'right' })); y += 8; doc.setDrawColor(...line); doc.line(M, y, W - M, y); y += 14; });
+      y += 6;
+    }
+    const sc = scenarios();
+    if (sc.length && !state.flags.opciones && t.rows.length) {
+      secLabel('Inversión por volumen', '/ ' + sc.length + ' escenarios · sin IVA');
+      const step = (W - 2 * M - 170) / sc.length; const right = W - M - 8;
+      doc.setFillColor(...band); doc.rect(M, y - 11, W - 2 * M, 20, 'F'); set('bold', 6.2, [255, 255, 255]); txt('CONCEPTO', M + 8, y + 2, { charSpace: 0.6 });
+      sc.forEach((q, i) => txt(int(q) + ' PZ', right - (sc.length - 1 - i) * step, y + 2, { align: 'right', charSpace: 0.6 })); y += 26;
+      const tot = sc.map(() => 0);
+      t.rows.filter(x => !x.it.nopcs).forEach(x => { need(24); set('normal', 9, ink); txt(doc.splitTextToSize(x.l.concept || '', 160)[0], M + 8, y);
+        sc.forEach((q, i) => { const v = x.unitNet * q; tot[i] += v; txt(money(v), right - (sc.length - 1 - i) * step, y, { align: 'right' }); }); y += 8; doc.setDrawColor(...line); doc.line(M, y, W - M, y); y += 14; });
+      need(26); doc.setFillColor(...band); doc.rect(M, y - 13, W - 2 * M, 22, 'F'); set('bold', 9.5, [255, 255, 255]); txt('TOTAL', M + 8, y + 1);
+      tot.forEach((v, i) => txt(money(v), right - (sc.length - 1 - i) * step, y + 1, { align: 'right' })); y += 30;
+    }
+    if (!state.flags.opciones && t.rows.length) {
+      secLabel('Esquema de pago', t.ant >= 100 ? '/ 100% anticipo' : '/ ' + t.ant + '% anticipo · ' + (100 - t.ant) + '% contra entrega');
+      need(62); const bw = (W - 2 * M - 12) / 2;
+      const box = (i, k, v, nn) => { const x0 = M + i * (bw + 12); doc.setDrawColor(228, 228, 231); doc.setLineWidth(0.7); doc.roundedRect(x0, y - 8, bw, 54, 6, 6, 'S');
+        set('bold', 5.8, light); txt(k.toUpperCase(), x0 + 12, y + 5, { charSpace: 1.8 }); set('bold', 14, ink); txt(v, x0 + 12, y + 24); set('normal', 7.8, muted); txt(doc.splitTextToSize(nn, bw - 24)[0], x0 + 12, y + 37); };
+      box(0, 'Anticipo ' + t.ant + '%', money(t.antAmt), 'Para iniciar producción.');
+      if (t.ant < 100) box(1, 'Saldo ' + (100 - t.ant) + '%', money(t.rest), 'Contra entrega.'); else box(1, 'Total', money(t.total), state.iva === 'mas' ? 'IVA incluido en el total.' : ivaNote() + '.');
+      y += 66;
+    }
+    secLabel('Condiciones comerciales');
+    condiciones(t).forEach(([k, v]) => { set('bold', 8.6, ink); const L = doc.splitTextToSize(v, W - 2 * M - 170); const h = L.length * 11 + 8; need(h + 4);
+      set('normal', 8.6, muted); txt(k, M + 6, y); set('bold', 8.6, ink); txt(L, M + 170, y); y += h - 7; doc.setDrawColor(240, 240, 241); doc.setLineWidth(0.6); doc.line(M, y, W - M, y); y += 10; });
+    if (f.notas.trim()) { y += 4; secLabel('Notas'); set('normal', 9, [63, 63, 70]); const L = doc.splitTextToSize(f.notas.trim(), W - 2 * M); need(L.length * 12 + 8); txt(L, M, y); y += L.length * 12 + 8; }
+
+    // cierre
+    set('normal', 8.4, [207, 207, 212]); const cc = doc.splitTextToSize(closingText(t), W - 2 * M - 32); const ch = 50 + cc.length * 10;
+    y += 4; if (y + ch > H - 42) { doc.addPage(); head(false); } doc.setFillColor(...band); doc.roundedRect(M, y, W - 2 * M, ch, 8, 8, 'F');
+    set('bold', 10, [255, 255, 255]); txt(f.cierre.trim() || closingTitle(), M + 16, y + 17);
+    set('normal', 8.4, [207, 207, 212]); txt(cc, M + 16, y + 29);
+    const ly = y + 27 + cc.length * 10; doc.setDrawColor(42, 42, 46); doc.line(M + 16, ly, W - M - 16, ly);
+    set('normal', 7, [154, 154, 160]); txt('DIEGO ENRICO · SOLUCIONES CREATIVAS · PUEBLA, MÉXICO · +52 222 413 1126', M + 16, ly + 12, { charSpace: 0.8 });
+
+    const pages = doc.getNumberOfPages();
+    for (let i = 1; i <= pages; i++) { doc.setPage(i); doc.setDrawColor(228, 228, 231); doc.setLineWidth(0.6); doc.line(M, H - 34, W - M, H - 34);
+      set('normal', 6.4, light); txt('DIEGO ENRICO · SOLUCIONES CREATIVAS', M, H - 22, { charSpace: 0.8 });
+      txt('Cotización ' + (f.folio || '') + ' · pág. ' + i + ' de ' + pages, W - M, H - 22, { align: 'right', charSpace: 0.8 }); }
+    return doc;
+  }
+  let downloads = null;
+  try { window.claude && window.claude.use && window.claude.use('downloads').then(d => { downloads = d; }).catch(() => {}); } catch (e) {}
+  $('btnPdf').addEventListener('click', async () => {
+    learnNow();
+    const cli = (state.f.cliente || '').replace(/\[.*?\]/g, '').trim();
+    const name = ('Cotizacion ' + (state.f.folio || '') + (cli && !/corresponda/i.test(cli) ? ' ' + cli : '')).replace(/[\\/:*?"<>|]/g, '').trim() + '.pdf';
+    try { const how = await saveFile(name, buildPdf().output(), 'application/pdf'); status(how === 'saved' ? 'PDF descargado.' : 'PDF listo. Si tu navegador no lo descargó, usa “Copiar texto”.'); }
+    catch (e) { const c = e && e.code; status(c === 'declined' ? 'Descarga cancelada.' : c === 'rate_limited' ? 'Ya hay una descarga pendiente; intenta en unos segundos.' : 'No se pudo descargar el PDF. Usa “Copiar texto”.', true); }
+  });
+
+  // ---------- Frecuentes, clientes y respaldo ----------
+  function addItem(k) { state.lines.push(mkLine(k)); state.example = false; autoFolio(); renderLines(); refresh();
+    const last = document.querySelector('#lines .line:last-child input[id^="q-"]'); if (last) { last.focus(); last.select && last.select(); } }
+  function renderFreq() {
+    const box = $('freq'); box.textContent = '';
+    frequent(10).forEach(it => { const b = document.createElement('button'); b.type = 'button';
+      const rf = refsOf(it); const last = rf.length ? rf.slice().sort((a, b) => (b[4] || 0) - (a[4] || 0))[0] : null;
+      b.append(it.name); if (last || it.v) { const m = document.createElement('b'); m.textContent = money(it.v ? it.v[0][1] : last[1]); b.appendChild(m); }
+      b.setAttribute('aria-label', 'Agregar ' + it.name); b.addEventListener('click', () => addItem(it.key)); box.appendChild(b); });
+    const learned = new Set(LRN.e.map(x => x.fo)).size;
+    $('freqNote').textContent = learned ? 'Aprendido de ' + learned + (learned === 1 ? ' cotización' : ' cotizaciones') : 'Se ajustan solos al guardar o descargar';
+  }
+  function fillClients() {
+    const dl = $('clientList'); dl.textContent = '';
+    Object.values(LRN.c).sort((a, b) => b.t - a.t).forEach(c => { const o = document.createElement('option'); o.value = c.name; dl.appendChild(o); });
+    clientHint();
+  }
+  function clientHint() {
+    const c = LRN.c[(state.f.cliente || '').trim().toLowerCase()]; const h = $('clientHint');
+    if (!c) { h.hidden = true; return; }
+    const iv = { mas: 'más IVA', incl: 'IVA incluido', sin: 'sin IVA', efe: 'efectivo sin factura' }[c.iva];
+    $('clientHintTxt').textContent = 'Última vez con ' + c.name + ': anticipo ' + (c.f.anticipo || '—') + '%, ' + iv + (c.f.dias ? ', ' + c.f.dias + ' días hábiles' : '') + '.';
+    h.hidden = false;
+  }
+  $('cliente').addEventListener('input', clientHint);
+  $('btnClient').addEventListener('click', () => { const c = LRN.c[(state.f.cliente || '').trim().toLowerCase()]; if (!c) return;
+    state.iva = c.iva; state.dm = c.dm || state.dm; state.ent = c.ent || state.ent; Object.assign(state.f, c.f); Object.assign(state.flags, c.flags || {});
+    fill(); renderLines(); refresh(); status('Apliqué las condiciones de la última cotización a ' + c.name + '.'); });
+
+  async function saveFile(name, data, mime) {
+    if (downloads) { await downloads.save({ filename: name, data }); return 'saved'; }
+    const blob = new Blob([data], { type: mime }); const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000); return 'browser';
+  }
+  $('btnExport').addEventListener('click', async () => {
+    const data = JSON.stringify({ app: 'cotizador-diego-enrico', v: 1, fecha: today(), aprendizaje: LRN, guardadas: savedList(), escala: TIER }, null, 1);
+    try { await saveFile('Respaldo cotizador Diego Enrico ' + today() + '.json', data, 'application/json'); status('Respaldo exportado.'); }
+    catch (e) { status(e && e.code === 'declined' ? 'Exportación cancelada.' : 'No se pudo exportar el respaldo.', true); }
+  });
+  $('importFile').addEventListener('change', () => {
+    const file = $('importFile').files[0]; if (!file) return; const rd = new FileReader();
+    rd.onload = () => { try { const d = JSON.parse(rd.result); if (d.app !== 'cotizador-diego-enrico') throw 0;
+        const seen = new Set(LRN.e.map(x => x.fo + '|' + x.k + '|' + x.q + '|' + x.p));
+        (d.aprendizaje && d.aprendizaje.e || []).forEach(x => { const id = x.fo + '|' + x.k + '|' + x.q + '|' + x.p; if (!seen.has(id)) { LRN.e.push(x); seen.add(id); } });
+        Object.entries(d.aprendizaje && d.aprendizaje.c || {}).forEach(([k, v]) => { if (!LRN.c[k] || LRN.c[k].t < v.t) LRN.c[k] = v; });
+        const L = savedList(); (d.guardadas || []).forEach(g => { if (!L.some(x => x.folio === g.folio)) L.push(g); }); put(SAVED, L.slice(0, 200));
+        if (Array.isArray(d.escala)) { TIER = d.escala; put(TIERS, TIER); renderTiers(); }
+        putL(); renderFreq(); fillAdd(); fillClients(); fillSaved(); status('Respaldo importado.');
+      } catch (e) { status('Ese archivo no es un respaldo del cotizador.', true); } $('importFile').value = ''; };
+    rd.readAsText(file);
+  });
+
+  // ---------- Cotizador de serigrafía por tintas (tabla LN1: costo por pieza en MXN) ----------
+  // columnas: 0-5 tintas (1, 2–3, 4–5, 6–7, 8–9, 10–11) · 6 prenda de color · 7 antimigrante · 8 HD/puff · 9 fleece · 10 glitter · 11 calidad exportación
+  const LN1 = {"100":[[9.13,15.97,20.53,25.1,29.66,34.22,1.76,3.51,3.51,3.51,1.76,7.02],[7.3,12.78,16.43,20.08,23.73,27.38,1.4,2.81,2.81,2.81,1.4,5.62],[5.93,10.38,13.35,16.31,19.28,22.24,1.14,2.28,2.28,2.28,1.14,4.56],[4.56,7.99,10.27,12.55,14.83,17.11,0.88,1.76,1.76,1.76,0.88,3.51],[4.11,7.19,9.24,11.29,13.35,15.4,0.79,1.58,1.58,1.58,0.79,3.16],[3.65,6.39,8.21,10.04,11.86,13.69,0.7,1.4,1.4,1.4,0.7,2.81]],"300":[[15.97,20.53,25.1,29.66,34.22,38.79,3.51,5.27,3.51,5.27,3.51,12.29],[12.78,16.43,20.08,23.73,27.38,31.03,2.81,4.21,2.81,4.21,2.81,9.83],[10.38,13.35,16.31,19.28,22.24,25.21,2.28,3.42,2.28,3.42,2.28,7.99],[7.99,10.27,12.55,14.83,17.11,19.39,1.76,2.63,1.76,2.63,1.76,6.14],[7.19,9.24,11.29,13.35,15.4,17.45,1.58,2.37,1.58,2.37,1.58,5.53],[6.39,8.21,10.04,11.86,13.69,15.51,1.4,2.11,1.4,2.11,1.4,4.91]],"600":[[18.25,22.82,27.38,31.94,36.5,41.07,5.27,7.02,5.27,7.02,7.02,14.04],[14.6,18.25,21.9,25.55,29.2,32.85,4.21,5.62,4.21,5.62,5.62,11.23],[11.86,14.83,17.8,20.76,23.73,26.69,3.42,4.56,3.42,4.56,4.56,9.13],[9.13,11.41,13.69,15.97,18.25,20.53,2.63,3.51,2.63,3.51,3.51,7.02],[8.21,10.27,12.32,14.37,16.43,18.48,2.37,3.16,2.37,3.16,3.16,6.32],[7.3,9.13,10.95,12.78,14.6,16.43,2.11,2.81,2.11,2.81,2.81,5.62]],"1200":[[22.82,27.38,31.94,36.5,41.07,45.63,10.53,14.04,10.53,8.78,14.04,17.55],[18.25,21.9,25.55,29.2,32.85,36.5,8.42,11.23,8.42,7.02,11.23,14.04],[14.83,17.8,20.76,23.73,26.69,29.66,6.84,9.13,6.84,5.7,9.13,11.41],[11.41,13.69,15.97,18.25,20.53,22.82,5.27,7.02,5.27,4.39,7.02,8.78],[10.27,12.32,14.37,16.43,18.48,20.53,4.74,6.32,4.74,3.95,6.32,7.9],[9.13,10.95,12.78,14.6,16.43,18.25,4.21,5.62,4.21,3.51,5.62,7.02]],"1800":[[25.1,34.22,38.79,43.35,47.91,52.47,14.04,19.31,15.8,10.53,19.31,19.31],[20.08,27.38,31.03,34.68,38.33,41.98,11.23,15.44,12.64,8.42,15.44,15.44],[16.31,22.24,25.21,28.18,31.14,34.11,9.13,12.55,10.27,6.84,12.55,12.55],[12.55,17.11,19.39,21.67,23.96,26.24,7.02,9.65,7.9,5.27,9.65,9.65],[11.29,15.4,17.45,19.51,21.56,23.61,6.32,8.69,7.11,4.74,8.69,8.69],[10.04,13.69,15.51,17.34,19.16,20.99,5.62,7.72,6.32,4.21,7.72,7.72]]};
+  const SIZES = [[100, 'Escudo', '≈ 10 × 10 cm'], [300, 'Media carta', '≈ 21.5 × 14 cm'], [600, 'Carta', '≈ 21.5 × 28 cm'], [1200, 'Doble carta', '≈ 28 × 43 cm'], [1800, 'Extra grande', '≈ 30 × 60 cm']];
+  const QT = [100, 250, 500, 1000, 10000, 100000];
+  const INKS = ['1', '2–3', '4–5', '6–7', '8–9', '10–11'];
+  const FX = [[7, 'Antimigrante (barrier base)', 'antimigrante'], [8, 'HD / Puff', 'HD/puff'], [10, 'Glitter', 'glitter'], [11, 'Calidad exportación', 'calidad exportación']];
+  const TQK = 'de-cotizador-tintas-v1';
+  const POSN = ['Frente', 'Espalda', 'Manga izquierda', 'Manga derecha', 'Pecho izquierdo', 'Cuello / etiqueta', 'Otra'];
+  let TQ = load(TQK) || { mk: '30', qty: '500', tec: 'Plastisol', prenda: 'color', fleece: false, pos: [{ name: 'Frente', size: 300, ink: 2, fx: [], w: '', h: '' }, { name: 'Espalda', size: 600, ink: 2, fx: [], w: '', h: '' }] };
+  const saveTQ = () => put(TQK, TQ);
+  const tierIdx = (q) => { let i = 0; QT.forEach((m, j) => { if (q >= m) i = j; }); return i; };
+  const sizeFor = (w, h) => { const a = n(w) * n(h); if (!(a > 0)) return null; const s = SIZES.find(x => x[0] >= a); return { a, s: s ? s[0] : null }; };
+  function tqCalc() {
+    const qty = Math.max(1, n(TQ.qty)); const ti = tierIdx(qty); const mk = n(TQ.mk) / 100;
+    const rows = TQ.pos.map(p => { const r = LN1[p.size][ti]; const base = r[p.ink];
+      const add = []; if (TQ.prenda === 'color') add.push(['Prenda de color', r[6]]); if (TQ.fleece) add.push(['Fleece', r[9]]);
+      p.fx.forEach(i => { const f = FX.find(x => x[0] === i); if (f) add.push([f[1], r[i]]); });
+      const cost = base + add.reduce((a, x) => a + x[1], 0); return { p, base, add, cost, sale: r2(cost * (1 + mk)) }; });
+    const cost = rows.reduce((a, x) => a + x.cost, 0); const sale = r2(rows.reduce((a, x) => a + x.sale, 0));
+    return { qty, ti, tier: QT[ti], rows, cost, sale, total: sale * qty, below: qty < 100 };
+  }
+  const sizeName = (cm) => { const s = SIZES.find(x => x[0] === cm); return s ? s[1].toLowerCase() + ' (' + int(cm) + ' cm²)' : int(cm) + ' cm²'; };
+  function tqDesc(c) {
+    const parts = c.rows.map(x => x.p.name + ': ' + sizeName(x.p.size) + ', ' + INKS[x.p.ink] + (x.p.ink === 0 ? ' tinta' : ' tintas') +
+      (x.p.fx.length ? ', ' + x.p.fx.map(i => FX.find(f => f[0] === i)[2]).join(' y ') : ''));
+    return parts.join(' · ') + '. ' + TQ.tec + (TQ.prenda === 'color' ? ' sobre prenda de color' : ' sobre prenda clara') + (TQ.fleece ? ', prenda afelpada' : '') + '.';
+  }
+  function renderTQ() {
+    $('tqMk').value = TQ.mk; $('tqQty').value = TQ.qty; $('tqTec').value = TQ.tec; $('tqPrenda').value = TQ.prenda; $('tqFleece').checked = TQ.fleece;
+    const box = $('tqPos'); box.textContent = '';
+    TQ.pos.forEach((p, i) => {
+      const d = document.createElement('div'); d.className = 'pos';
+      const top = document.createElement('div'); top.className = 'pos-top';
+      const lab = document.createElement('label'); lab.textContent = 'Posición ' + (i + 1);
+      const sel = document.createElement('select'); sel.id = 'tqName-' + i; POSN.forEach(x => { const o = document.createElement('option'); o.value = x; o.textContent = x; sel.appendChild(o); });
+      if (!POSN.includes(p.name)) { const o = document.createElement('option'); o.value = p.name; o.textContent = p.name; sel.appendChild(o); } sel.value = p.name;
+      sel.addEventListener('change', () => { p.name = sel.value; tqRefresh(); }); lab.appendChild(sel); top.appendChild(lab);
+      const del = document.createElement('button'); del.type = 'button'; del.textContent = '×'; del.setAttribute('aria-label', 'Quitar posición ' + (i + 1)); del.disabled = TQ.pos.length < 2;
+      del.addEventListener('click', () => { TQ.pos.splice(i, 1); renderTQ(); }); top.appendChild(del); d.appendChild(top);
+
+      const k1 = document.createElement('div'); k1.className = 'sub-k'; k1.textContent = 'Tamaño'; d.appendChild(k1);
+      const sz = document.createElement('div'); sz.className = 'sizes'; sz.setAttribute('role', 'group'); sz.setAttribute('aria-label', 'Tamaño');
+      SIZES.forEach(sv => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', String(p.size === sv[0]));
+        b.append(sv[1] + ' · ' + int(sv[0]) + ' cm²'); const sm = document.createElement('small'); sm.textContent = sv[2]; b.appendChild(sm);
+        b.addEventListener('click', () => { p.size = sv[0]; p.w = ''; p.h = ''; renderTQ(); }); sz.appendChild(b); });
+      d.appendChild(sz);
+      const dims = document.createElement('div'); dims.className = 'dims';
+      const note = document.createElement('div'); note.className = 'note';
+      const paintNote = () => { const r = sizeFor(p.w, p.h); note.className = 'note';
+        if (!r) note.textContent = 'O escribe la medida del arte y se elige el tamaño que la cubre.';
+        else if (!r.s) { note.className = 'note warn'; note.textContent = int(Math.round(r.a)) + ' cm² pasa del tamaño más grande (1,800 cm²). Cotízalo aparte.'; }
+        else note.textContent = int(Math.round(r.a)) + ' cm² → se cotiza como ' + sizeName(r.s) + '.'; };
+      const mkd = (label, key) => { const l = document.createElement('label'); l.textContent = label; const inp = document.createElement('input'); inp.className = 'num'; inp.inputMode = 'decimal'; inp.id = 'tq' + key + '-' + i; inp.value = p[key];
+        inp.addEventListener('input', () => { p[key] = inp.value; const r = sizeFor(p.w, p.h); if (r && r.s) p.size = r.s;
+          paintNote(); sz.querySelectorAll('button').forEach((b, j) => b.setAttribute('aria-pressed', String(SIZES[j][0] === p.size))); tqRefresh(); });
+        l.appendChild(inp); dims.appendChild(l); };
+      mkd('Ancho (cm)', 'w'); mkd('Alto (cm)', 'h'); dims.appendChild(note); d.appendChild(dims); paintNote();
+
+      const k2 = document.createElement('div'); k2.className = 'sub-k'; k2.textContent = 'Número de tintas'; d.appendChild(k2);
+      const ik = document.createElement('div'); ik.className = 'inks'; ik.setAttribute('role', 'group'); ik.setAttribute('aria-label', 'Número de tintas');
+      INKS.forEach((t, j) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = t; b.setAttribute('aria-pressed', String(p.ink === j));
+        b.addEventListener('click', () => { p.ink = j; renderTQ(); }); ik.appendChild(b); });
+      d.appendChild(ik);
+      const k3 = document.createElement('div'); k3.className = 'sub-k'; k3.textContent = 'Efectos'; d.appendChild(k3);
+      const fx = document.createElement('div'); fx.className = 'fx';
+      FX.forEach(f => { const l = document.createElement('label'); l.className = 'check'; const c = document.createElement('input'); c.type = 'checkbox'; c.id = 'tqfx' + f[0] + '-' + i; c.checked = p.fx.includes(f[0]);
+        c.addEventListener('change', () => { p.fx = c.checked ? p.fx.concat(f[0]) : p.fx.filter(x => x !== f[0]); tqRefresh(); }); l.append(c, f[1]); fx.appendChild(l); });
+      d.appendChild(fx); box.appendChild(d);
+    });
+    tqRefresh();
+  }
+  function tqRefresh() {
+    saveTQ(); const c = tqCalc(); const R = $('tqRes'); R.textContent = '';
+    const big = document.createElement('div'); big.className = 'tq-big';
+    const bx = (k, v) => { const d = document.createElement('div'); const a = document.createElement('div'); a.className = 'k'; a.textContent = k; const b = document.createElement('div'); b.className = 'v'; b.textContent = v; d.append(a, b); big.appendChild(d); };
+    bx('Precio de venta por pieza', money(c.sale)); bx('Total ' + int(c.qty) + ' pz', money(c.total)); R.appendChild(big);
+    const tb = document.createElement('table'); const hr = document.createElement('tr');
+    [['Posición', ''], ['Costo', 'r'], ['Venta', 'r']].forEach(([h, cl]) => { const th = document.createElement('th'); th.textContent = h; if (cl) th.className = cl; th.scope = 'col'; hr.appendChild(th); }); tb.appendChild(hr);
+    c.rows.forEach(x => { const tr = document.createElement('tr'); const a = document.createElement('td');
+      a.textContent = x.p.name + ' · ' + sizeName(x.p.size) + ' · ' + INKS[x.p.ink] + (x.p.ink === 0 ? ' tinta' : ' tintas');
+      const sm = document.createElement('div'); sm.className = 'muted'; sm.textContent = 'Base ' + money(x.base) + (x.add.length ? ' + ' + x.add.map(y => y[0] + ' ' + money(y[1])).join(' + ') : ''); a.appendChild(sm);
+      const b = document.createElement('td'); b.className = 'r'; b.textContent = money(x.cost); const e = document.createElement('td'); e.className = 'r'; e.textContent = money(x.sale);
+      tr.append(a, b, e); tb.appendChild(tr); });
+    const tr = document.createElement('tr'); ['Por pieza', money(c.cost), money(c.sale)].forEach((v, i) => { const td = document.createElement('td'); td.textContent = v; td.style.fontWeight = '700'; if (i) td.className = 'r'; tr.appendChild(td); }); tb.appendChild(tr);
+    R.appendChild(tb);
+    const nt = document.createElement('p'); nt.className = 'hint';
+    nt.textContent = 'Escala de la tabla: ' + int(c.tier) + ' pz' + (c.below ? ' (menos de 100 pz se cotiza con la escala de 100)' : '') + '. El costo solo se ve aquí; en la hoja sale el precio de venta.' + (TQ.tec !== 'Plastisol' ? ' ' + TQ.tec + ' aplica solo en prenda 100% algodón, mismo precio.' : '');
+    R.appendChild(nt);
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'primary'; b.textContent = 'Agregar a la cotización';
+    b.addEventListener('click', () => {
+      const names = c.rows.map(x => x.p.name.toLowerCase()); const nm = names.length > 1 ? names.slice(0, -1).join(', ') + ' y ' + names[names.length - 1] : names[0];
+      const l = mkLine('ser_calc', c.qty); l.concept = 'Estampado serigrafía · ' + nm; l.desc = tqDesc(c); l.price = String(r2(c.sale)); l.manual = true;
+      l.cost = String(r2(c.cost)); l.factor = String(1 + n(TQ.mk) / 100); l.qty = String(c.qty);
+      state.lines.push(l); state.example = false; autoFolio(); renderLines(); refresh();
+      status('Agregado: ' + int(c.qty) + ' pz a ' + money(c.sale) + ' por pieza.');
+      try { $('lines').scrollIntoView({ behavior: 'smooth', block: 'end' }); } catch (e) {}
+    });
+    R.appendChild(b);
+  }
+  $('tqMk').addEventListener('input', () => { TQ.mk = $('tqMk').value; tqRefresh(); });
+  $('tqQty').addEventListener('input', () => { TQ.qty = $('tqQty').value; tqRefresh(); });
+  $('tqTec').addEventListener('change', () => { TQ.tec = $('tqTec').value; tqRefresh(); });
+  $('tqPrenda').addEventListener('change', () => { TQ.prenda = $('tqPrenda').value; tqRefresh(); });
+  $('tqFleece').addEventListener('change', () => { TQ.fleece = $('tqFleece').checked; tqRefresh(); });
+  $('tqAddPos').addEventListener('click', () => { const used = TQ.pos.map(p => p.name); TQ.pos.push({ name: POSN.find(x => !used.includes(x)) || 'Otra', size: 100, ink: 0, fx: [], w: '', h: '' }); renderTQ(); });
+
+  // ---------- Inicio ----------
+  window.__DE = { calc, suggest, byKey, buildPdf, state: () => state, tqCalc: () => tqCalc(), TQ: () => TQ };
+  fill(); fillAdd(); renderTiers(); fillSaved(); renderFreq(); fillClients(); renderTQ(); if (!state.f.folio) autoFolio(); renderLines(); refresh();
+})();
+</script>
+</body></html>
